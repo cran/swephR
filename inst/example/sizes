@@ -1,0 +1,12 @@
+-rw-r--r-- 1 ralf ralf 1734852 Dez 31 11:52 libswe.a
+-rw-r--r-- 1 ralf ralf 1469184 Dez 31 11:50 RcppExports.o
+-rw-r--r-- 1 ralf ralf  339808 Dez 31 11:50 Section16.o
+-rw-r--r-- 1 ralf ralf  733100 Dez 31 11:50 Section1.o
+-rw-r--r-- 1 ralf ralf  999464 Dez 31 11:51 Section2.o
+-rw-r--r-- 1 ralf ralf  323008 Dez 31 11:51 Section3.o
+-rw-r--r-- 1 ralf ralf 1266740 Dez 31 11:51 Section4.o
+-rw-r--r-- 1 ralf ralf 2083728 Dez 31 11:51 Section6.o
+-rw-r--r-- 1 ralf ralf  542288 Dez 31 11:51 Section7.o
+-rw-r--r-- 1 ralf ralf  661484 Dez 31 11:51 Section8.o
+-rw-r--r-- 1 ralf ralf  306440 Dez 31 11:52 Section9.o
+-rwxr-xr-x 1 ralf ralf 5706368 Dez 31 11:52 swephR.so
