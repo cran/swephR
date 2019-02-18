@@ -174,18 +174,6 @@
 #  include <unistd.h>
 #endif
 
-#if defined(sun) || defined(__sun)
-static size_t  my_strnlen(const char*  str, size_t  maxlen)
-{
-    char *p = memchr(str, 0, maxlen);
-    if (p == NULL)
-       return maxlen;
-    else
-       return (p - str);
-}
-#define strnlen(x,y) my_strnlen((x),(y))
-#endif /* sun || __sun */
-
 /*
  * if we have 16-bit ints, we define INT_16; we will need %ld to printf an int32
  * if we have 64-bit long, we define LONG_64
@@ -349,6 +337,14 @@ typedef int32    centisec;       /* centiseconds used for angles and times */
 
 #include <string.h>
 #include <ctype.h>
+
+/* autoconf based strnlen as used by gnuplot, c.f. https://github.com/gdraheim/zziplib/issues/25 */
+#ifndef HAVE_STRNLEN
+static size_t strnlen(const char *str, size_t n) {
+    const char * stop = (char *)memchr(str, '\0', n);
+    return stop ? stop - str : n;
+}
+#endif
 
 #endif /* _SWEODEF_INCLUDED */
 #endif /* _OURDEF_INCLUDED */

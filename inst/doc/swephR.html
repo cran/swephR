@@ -12,14 +12,14 @@
 
 <meta name="author" content="Victor Reijs" />
 
-<meta name="date" content="2019-02-01" />
+<meta name="date" content="2019-02-09" />
 
 <title>swephR</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
 a.sourceLine:empty { height: 1.2em; }
@@ -81,7 +81,29 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -278,7 +300,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">swephR</h1>
 <h4 class="author"><em>Victor Reijs</em></h4>
-<h4 class="date"><em>2019-02-01</em></h4>
+<h4 class="date"><em>2019-02-09</em></h4>
 
 
 
@@ -291,7 +313,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(swephR)</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw">data</span>(SE)</a></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
-<li>Optionaly set the directory path of the ephemeris files (the format of the path depends on your OS), e.g.:</li>
+<li>Optionally set the directory path of the ephemeris files (the format of the path depends on your OS), e.g.:</li>
 </ol>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">swe_set_ephe_path</span>(<span class="st">&quot;C:</span><span class="ch">\\</span><span class="st">sweph</span><span class="ch">\\</span><span class="st">ephe&quot;</span>)</a></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
@@ -364,7 +386,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt; $serr</span></a>
 <a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt; [1] &quot;&quot;</span></a></code></pre></div>
 <ol start="6" style="list-style-type: decimal">
-<li>Here is a miniature sample program described in Chapter 0 of the programma’s manual of SE (<a href="http://www.astro.com/swisseph/swephprg.htm#_Toc505244830">see also</a>):</li>
+<li>Here is a miniature sample program described in Chapter 0 of the programmer’s manual of SE (<a href="http://www.astro.com/swisseph/swephprg.htm#_Toc505244830">see also</a>):</li>
 </ol>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">  <span class="kw">options</span>(<span class="dt">digits=</span><span class="dv">6</span>)</a>
 <a class="sourceLine" id="cb7-2" title="2">  <span class="kw">swe_set_ephe_path</span>(<span class="ot">NULL</span>)</a>
