@@ -462,6 +462,137 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// set_sid_mode
+void set_sid_mode(int sid_mode, double t0, double ayan_t0);
+RcppExport SEXP _swephR_set_sid_mode(SEXP sid_modeSEXP, SEXP t0SEXP, SEXP ayan_t0SEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type sid_mode(sid_modeSEXP);
+    Rcpp::traits::input_parameter< double >::type t0(t0SEXP);
+    Rcpp::traits::input_parameter< double >::type ayan_t0(ayan_t0SEXP);
+    set_sid_mode(sid_mode, t0, ayan_t0);
+    return R_NilValue;
+END_RCPP
+}
+// get_ayanamsa_name
+std::string get_ayanamsa_name(int sid_mode);
+RcppExport SEXP _swephR_get_ayanamsa_name(SEXP sid_modeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type sid_mode(sid_modeSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_ayanamsa_name(sid_mode));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_ayanamsa_ex_ut
+Rcpp::List get_ayanamsa_ex_ut(double jd_ut, int iflag);
+RcppExport SEXP _swephR_get_ayanamsa_ex_ut(SEXP jd_utSEXP, SEXP iflagSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type jd_ut(jd_utSEXP);
+    Rcpp::traits::input_parameter< int >::type iflag(iflagSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_ayanamsa_ex_ut(jd_ut, iflag));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_ayanamsa_ex
+Rcpp::List get_ayanamsa_ex(double jd_et, int iflag);
+RcppExport SEXP _swephR_get_ayanamsa_ex(SEXP jd_etSEXP, SEXP iflagSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type jd_et(jd_etSEXP);
+    Rcpp::traits::input_parameter< int >::type iflag(iflagSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_ayanamsa_ex(jd_et, iflag));
+    return rcpp_result_gen;
+END_RCPP
+}
+// houses_ex
+Rcpp::List houses_ex(double jd_ut, int cuspflag, double geolat, double geolon, char hsys);
+RcppExport SEXP _swephR_houses_ex(SEXP jd_utSEXP, SEXP cuspflagSEXP, SEXP geolatSEXP, SEXP geolonSEXP, SEXP hsysSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type jd_ut(jd_utSEXP);
+    Rcpp::traits::input_parameter< int >::type cuspflag(cuspflagSEXP);
+    Rcpp::traits::input_parameter< double >::type geolat(geolatSEXP);
+    Rcpp::traits::input_parameter< double >::type geolon(geolonSEXP);
+    Rcpp::traits::input_parameter< char >::type hsys(hsysSEXP);
+    rcpp_result_gen = Rcpp::wrap(houses_ex(jd_ut, cuspflag, geolat, geolon, hsys));
+    return rcpp_result_gen;
+END_RCPP
+}
+// houses_armc
+Rcpp::List houses_armc(double armc, double geolat, double eps, char hsys);
+RcppExport SEXP _swephR_houses_armc(SEXP armcSEXP, SEXP geolatSEXP, SEXP epsSEXP, SEXP hsysSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type armc(armcSEXP);
+    Rcpp::traits::input_parameter< double >::type geolat(geolatSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< char >::type hsys(hsysSEXP);
+    rcpp_result_gen = Rcpp::wrap(houses_armc(armc, geolat, eps, hsys));
+    return rcpp_result_gen;
+END_RCPP
+}
+// house_name
+std::string house_name(char hsys);
+RcppExport SEXP _swephR_house_name(SEXP hsysSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< char >::type hsys(hsysSEXP);
+    rcpp_result_gen = Rcpp::wrap(house_name(hsys));
+    return rcpp_result_gen;
+END_RCPP
+}
+// house_pos
+Rcpp::List house_pos(double armc, double geolat, double eps, char hsys, Rcpp::NumericVector xpin);
+RcppExport SEXP _swephR_house_pos(SEXP armcSEXP, SEXP geolatSEXP, SEXP epsSEXP, SEXP hsysSEXP, SEXP xpinSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type armc(armcSEXP);
+    Rcpp::traits::input_parameter< double >::type geolat(geolatSEXP);
+    Rcpp::traits::input_parameter< double >::type eps(epsSEXP);
+    Rcpp::traits::input_parameter< char >::type hsys(hsysSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type xpin(xpinSEXP);
+    rcpp_result_gen = Rcpp::wrap(house_pos(armc, geolat, eps, hsys, xpin));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gauquelin_sector
+Rcpp::List gauquelin_sector(double jd_ut, int ipl, std::string starname, int ephe_flag, int imeth, Rcpp::NumericVector geopos, double atpress, double attemp);
+RcppExport SEXP _swephR_gauquelin_sector(SEXP jd_utSEXP, SEXP iplSEXP, SEXP starnameSEXP, SEXP ephe_flagSEXP, SEXP imethSEXP, SEXP geoposSEXP, SEXP atpressSEXP, SEXP attempSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type jd_ut(jd_utSEXP);
+    Rcpp::traits::input_parameter< int >::type ipl(iplSEXP);
+    Rcpp::traits::input_parameter< std::string >::type starname(starnameSEXP);
+    Rcpp::traits::input_parameter< int >::type ephe_flag(ephe_flagSEXP);
+    Rcpp::traits::input_parameter< int >::type imeth(imethSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type geopos(geoposSEXP);
+    Rcpp::traits::input_parameter< double >::type atpress(atpressSEXP);
+    Rcpp::traits::input_parameter< double >::type attemp(attempSEXP);
+    rcpp_result_gen = Rcpp::wrap(gauquelin_sector(jd_ut, ipl, starname, ephe_flag, imeth, geopos, atpress, attemp));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sidtime
+double sidtime(double jd_ut);
+RcppExport SEXP _swephR_sidtime(SEXP jd_utSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type jd_ut(jd_utSEXP);
+    rcpp_result_gen = Rcpp::wrap(sidtime(jd_ut));
+    return rcpp_result_gen;
+END_RCPP
+}
 // day_of_week
 Rcpp::IntegerVector day_of_week(Rcpp::NumericVector jd);
 RcppExport SEXP _swephR_day_of_week(SEXP jdSEXP) {
@@ -509,6 +640,16 @@ static const R_CallMethodDef CallEntries[] = {
     {"_swephR_get_tid_acc", (DL_FUNC) &_swephR_get_tid_acc, 0},
     {"_swephR_set_delta_t_userdef", (DL_FUNC) &_swephR_set_delta_t_userdef, 1},
     {"_swephR_set_topo", (DL_FUNC) &_swephR_set_topo, 3},
+    {"_swephR_set_sid_mode", (DL_FUNC) &_swephR_set_sid_mode, 3},
+    {"_swephR_get_ayanamsa_name", (DL_FUNC) &_swephR_get_ayanamsa_name, 1},
+    {"_swephR_get_ayanamsa_ex_ut", (DL_FUNC) &_swephR_get_ayanamsa_ex_ut, 2},
+    {"_swephR_get_ayanamsa_ex", (DL_FUNC) &_swephR_get_ayanamsa_ex, 2},
+    {"_swephR_houses_ex", (DL_FUNC) &_swephR_houses_ex, 5},
+    {"_swephR_houses_armc", (DL_FUNC) &_swephR_houses_armc, 4},
+    {"_swephR_house_name", (DL_FUNC) &_swephR_house_name, 1},
+    {"_swephR_house_pos", (DL_FUNC) &_swephR_house_pos, 5},
+    {"_swephR_gauquelin_sector", (DL_FUNC) &_swephR_gauquelin_sector, 8},
+    {"_swephR_sidtime", (DL_FUNC) &_swephR_sidtime, 1},
     {"_swephR_day_of_week", (DL_FUNC) &_swephR_day_of_week, 1},
     {NULL, NULL, 0}
 };

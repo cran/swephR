@@ -57,7 +57,7 @@ swe_heliacal_angle(jd_ut, dgeo, datm, dobs, helflag, mag, AziO, AziS, AziM,
 \arguments{
 \item{jd_start}{Julian day number as double (UT)}
 
-\item{ephe_flag}{Ephemeris flag as integer (SE$FLG_JPLEPH=1, SE$FLG_SWIEPH=2 or SE$FLG_MOSEPH=4)}
+\item{ephe_flag}{Ephemeris flag as integer (\code{SE$FLG_JPLEPH=1}, \code{SE$FLG_SWIEPH=2} or \code{SE$FLG_MOSEPH=4})}
 
 \item{geopos}{position as numeric vector (longitude, latitude, height)}
 
@@ -65,13 +65,14 @@ swe_heliacal_angle(jd_ut, dgeo, datm, dobs, helflag, mag, AziO, AziS, AziM,
 
 \item{jd_ut}{UT Julian day number as double (day)}
 
-\item{ifltype}{eclipse type as integer (e.g.: SE$ECL_CENTRAL=1,SE$ECL_NONCENTRAL=2,SE$ECL_TOTAL=4,SE$ECL_ANNULAR=8,SE$ECL_PARTIAL=16,SE$ECL_ANNULAR_TOTAL=32)}
+\item{ifltype}{eclipse type as integer (\code{SE$ECL_CENTRAL=1}, \code{SE$ECL_NONCENTRAL=2},
+\code{SE$ECL_TOTAL=4}, \code{SE$ECL_ANNULAR=8}, \code{SE$ECL_PARTIAL=16} or \code{SE$ECL_ANNULAR_TOTAL=32})}
 
-\item{ipl}{Body/planet as integer (SE$SUN=0, SE$MOON=1,  ... SE$PLUTO=9)}
+\item{ipl}{Body/planet as integer (\code{SE$SUN=0}, \code{SE$MOON=1}, ... \code{SE$PLUTO=9})}
 
-\item{starname}{Star name as string ("" for no star)}
+\item{starname}{Star name as string (\code{""} for no star)}
 
-\item{rsmi}{Event flag as integer (e.g.: SE$CALC_RISE=1, SE$CALC_SET=2,SE$CALC_MTRANSIT=4,SE$CALC_ITRANSIT=8)}
+\item{rsmi}{Event flag as integer (e.g.: \code{SE$CALC_RISE=1}, \code{SE$CALC_SET=2}, \code{SE$CALC_MTRANSIT=4}, \code{SE$CALC_ITRANSIT=8})}
 
 \item{atpress}{Atmospheric pressure as double (hPa)}
 
@@ -81,7 +82,7 @@ swe_heliacal_angle(jd_ut, dgeo, datm, dobs, helflag, mag, AziO, AziS, AziM,
 
 \item{jd_et}{ET Julian day number as double (day)}
 
-\item{coord_flag}{Coordinate flag as integer (reference system (SE$ECL2HOR=0 or SE$EQU2HOR=1))}
+\item{coord_flag}{Coordinate flag as integer (reference system (\code{SE$ECL2HOR=0} or \code{SE$EQU2HOR=1}))}
 
 \item{xin}{Position of body as numeric vector (either ecliptical or equatorial coordinates, depending on coord_flag)}
 
@@ -91,7 +92,7 @@ swe_heliacal_angle(jd_ut, dgeo, datm, dobs, helflag, mag, AziO, AziS, AziM,
 
 \item{lapse_rate}{lapse rate as double (K/m)}
 
-\item{calc_flag}{Calculation flag as integer (refraction direction (SE$TRUE_TO_APP=0 or SE$APP_TO_TRUE=1))}
+\item{calc_flag}{Calculation flag as integer (refraction direction (\code{SE$TRUE_TO_APP=0} or \code{SE$APP_TO_TRUE=1}))}
 
 \item{jd_utstart}{UT Julian day number as double (day)}
 
@@ -120,8 +121,8 @@ swe_heliacal_angle(jd_ut, dgeo, datm, dobs, helflag, mag, AziO, AziS, AziM,
 \item{AltM}{Moon's altitude as double (deg)}
 }
 \value{
-\code{swe_sol_eclipse_when_loc} returns a list with named entries: 
-     \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector, 
+\code{swe_sol_eclipse_when_loc} returns a list with named entries:
+     \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector,
      \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
 
 \code{swe_lun_eclipse_when_loc} returns a list with named entries:
@@ -137,7 +138,7 @@ swe_heliacal_angle(jd_ut, dgeo, datm, dobs, helflag, mag, AziO, AziS, AziM,
      and \code{serr} error warning as string
 
 \code{swe_rise_trans_true_hor} returns a list with named entries: \code{return} status flag as integer,
-     \code{tret} for azimuth/altitude info as numeric vector and \code{serr} error message as string
+     \code{tret} for azimuth/altitude info as double and \code{serr} error message as string
 
 \code{swe_pheno_ut} returns a list with named entries:
      \code{return} status fag as integer, \code{attr} for phenomenon information as numeric vector
@@ -172,8 +173,8 @@ swe_heliacal_angle(jd_ut, dgeo, datm, dobs, helflag, mag, AziO, AziS, AziM,
      \code{dret} heliacal angle as numeric vector and \code{serr} error message as string
 }
 \description{
-Functions for: determining eclipse and occultation calculations, computing the times of rising, setting and 
-meridian transits for all planets, asteroids, the moon and the fixed stars; computing phase, phase angle, elongation, 
+Functions for: determining eclipse and occultation calculations, computing the times of rising, setting and
+meridian transits for all planets, asteroids, the moon and the fixed stars; computing phase, phase angle, elongation,
 apparent diameter, apparent magnitude for the Sun, the Moon, all planets and asteroids; and determining
 heliacal phenomenon after a given start date
 }
@@ -212,32 +213,32 @@ heliacal phenomenon after a given start date
 
 \describe{
 \item{swe_azalt_rev()}{compute either ecliptical or equatorial coordinates from azimuth and true altitude.
-If only an apparent altitude is given, the true altitude has to be computed first with 
+If only an apparent altitude is given, the true altitude has to be computed first with
 e.g. the function swe_refrac_extended().}
 }
 
 \describe{
-\item{swe_refrac_extended()}{Calculate either the topocentric altitude from the apparent altitude 
+\item{swe_refrac_extended()}{Calculate either the topocentric altitude from the apparent altitude
 or the apparent altitude from the topocentric altitude.
-It allows correct calculation of refraction for heights above sea > 0, 
+It allows correct calculation of refraction for heights above sea > 0,
 where the ideal horizon and planets that are visible may have a negative altitude. }
 }
 
 \describe{
-\item{swe_heliacal_ut()}{Compute the Julian day of the next heliacal phenomenon after a given UT start date. 
+\item{swe_heliacal_ut()}{Compute the Julian day of the next heliacal phenomenon after a given UT start date.
 It works between geographic latitudes 60 South and 60 North.}
 }
 
 \describe{
-\item{swe_vis_limit_mag()}{Determine the limiting visual magnitude in dark skies. If the visual magnitude mag of an object is known 
-for a given date (e. g. from a call of function swe_pheno_ut(), and if magnitude is smaller than the value returned 
+\item{swe_vis_limit_mag()}{Determine the limiting visual magnitude in dark skies. If the visual magnitude mag of an object is known
+for a given date (e. g. from a call of function swe_pheno_ut(), and if magnitude is smaller than the value returned
 by swe_vis_limit_mag(), then it is visible.}
 }
 
 \describe{
-\item{swe_heliacal_pheno_ut()}{Provide data that are relevant for the calculation of heliacal risings and settings. 
-This function does not provide data of heliacal risings and settings itself, just some 
-additional data mostly used for test purposes. To calculate heliacal risings and settings, 
+\item{swe_heliacal_pheno_ut()}{Provide data that are relevant for the calculation of heliacal risings and settings.
+This function does not provide data of heliacal risings and settings itself, just some
+additional data mostly used for test purposes. To calculate heliacal risings and settings,
 use the function swe_heliacal_ut().}
 }
 
@@ -273,5 +274,5 @@ swe_heliacal_angle(1234567.5,c(0,50,10),c(1013.25,15,20,0.25),c(25,1,1,1,5,0.8),
   SE$HELFLAG_HIGH_PRECISION+SE$HELFLAG_OPTICAL_PARAMS,-1,124,120,0,-45)
 }
 \seealso{
-\url{http://www.astro.com/swisseph/swephprg.htm#_Toc505244853}
+Section 6 in \url{http://www.astro.com/swisseph/swephprg.htm}
 }

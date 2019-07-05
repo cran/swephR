@@ -1,4 +1,4 @@
-// Copyright 2018 Ralf Stubner and Victor Reijs
+// Copyright 2018, 2019 Ralf Stubner and Victor Reijs
 //
 // This file is part of swephR.
 //
@@ -23,7 +23,7 @@
 //' @title Section 1: The Ephemeris file related functions
 //' @name Section1
 //' @description Several initialization functions
-//' @seealso \url{http://www.astro.com/swisseph/swephprg.htm?lang=g#_Toc505244831}
+//' @seealso Section 1 in \url{http://www.astro.com/swisseph/swephprg.htm}
 //' @details
 //' \describe{
 //'   \item{swe_set_ephe_path()}{This is the first function that should be called
@@ -34,7 +34,7 @@
 //'        Swiss Ephemeris may work, but the results may be not 100\% consistent.}
 //'   \item{swe_close()}{At the end of your computations this function releases most
 //'        resources (open files and allocated memory) used by Swiss Ephemeris.}
-//'   \item{swe_set_jpl_file()}{Set name of JPL ephemeris file.} 
+//'   \item{swe_set_jpl_file()}{Set name of JPL ephemeris file.}
 //'   \item{swe_version()}{The function provides the version number of the Swiss Ephemeris software.}
 //' }
 //' @param path Directory for the sefstars.txt, swe_deltat.txt and jpl files
@@ -145,7 +145,7 @@ Rcpp::List calc(Rcpp::NumericVector jd_et, Rcpp::IntegerVector ipl, int iflag) {
 //' @title Section 3: Find a planetary or asteroid name
 //' @name Section3
 //' @description Find a planetary or asteroid name.
-//' @seealso \url{http://www.astro.com/swisseph/swephprg.htm#_Toc505244843}
+//' @seealso Section 3 in \url{http://www.astro.com/swisseph/swephprg.htm}
 //' @details
 //' \describe{
 //'   \item{swe_get_planet_name()}{Convert object number into object name.}
@@ -158,7 +158,7 @@ Rcpp::List calc(Rcpp::NumericVector jd_et, Rcpp::IntegerVector ipl, int iflag) {
 //' @rdname Section3
 //' @export
 // [[Rcpp::export(swe_get_planet_name)]]
-std::string get_planet_name(int ipl) { 
+std::string get_planet_name(int ipl) {
   std::array<char, 41> objectname{'\0'};
   swe_get_planet_name(ipl,&objectname[0]);
   return std::string(&objectname[0]);
@@ -265,23 +265,23 @@ Rcpp::List fixstar2_mag(Rcpp::CharacterVector starname) {
 //////////////////////////////////////////////////////////////////////////
 //' @title Section 6: Eclipses, Risings, Settings, Meridian Transits, Planetary Phenomena
 //' @name Section6
-//' @description Functions for: determining eclipse and occultation calculations, computing the times of rising, setting and 
-//' meridian transits for all planets, asteroids, the moon and the fixed stars; computing phase, phase angle, elongation, 
+//' @description Functions for: determining eclipse and occultation calculations, computing the times of rising, setting and
+//' meridian transits for all planets, asteroids, the moon and the fixed stars; computing phase, phase angle, elongation,
 //' apparent diameter, apparent magnitude for the Sun, the Moon, all planets and asteroids; and determining
 //' heliacal phenomenon after a given start date
-//' @seealso \url{http://www.astro.com/swisseph/swephprg.htm#_Toc505244853}
+//' @seealso Section 6 in \url{http://www.astro.com/swisseph/swephprg.htm}
 //' @param jd_et  ET Julian day number as double (day)
-//' @param ipl  Body/planet as integer (SE$SUN=0, SE$MOON=1,  ... SE$PLUTO=9)
-//' @param starname  Star name as string ("" for no star)
+//' @param ipl  Body/planet as integer (\code{SE$SUN=0}, \code{SE$MOON=1}, ... \code{SE$PLUTO=9})
+//' @param starname  Star name as string (\code{""} for no star)
 //' @param jd_ut  UT Julian day number as double (day)
-//' @param calc_flag Calculation flag as integer (refraction direction (SE$TRUE_TO_APP=0 or SE$APP_TO_TRUE=1))
-//' @param coord_flag Coordinate flag as integer (reference system (SE$ECL2HOR=0 or SE$EQU2HOR=1)) 
+//' @param calc_flag Calculation flag as integer (refraction direction (\code{SE$TRUE_TO_APP=0} or \code{SE$APP_TO_TRUE=1}))
+//' @param coord_flag Coordinate flag as integer (reference system (\code{SE$ECL2HOR=0} or \code{SE$EQU2HOR=1}))
 //' @param atpress Atmospheric pressure as double (hPa)
 //' @param attemp Atmospheric temperature as double (Celsius)
-//' @param ephe_flag Ephemeris flag as integer (SE$FLG_JPLEPH=1, SE$FLG_SWIEPH=2 or SE$FLG_MOSEPH=4)
+//' @param ephe_flag Ephemeris flag as integer (\code{SE$FLG_JPLEPH=1}, \code{SE$FLG_SWIEPH=2} or \code{SE$FLG_MOSEPH=4})
 //' @param horhgt Horizon apparent altitude as double (deg)
 //' @param xin  Position of body as numeric vector (either ecliptical or equatorial coordinates, depending on coord_flag)
-//' @param rsmi  Event flag as integer (e.g.: SE$CALC_RISE=1, SE$CALC_SET=2,SE$CALC_MTRANSIT=4,SE$CALC_ITRANSIT=8)
+//' @param rsmi  Event flag as integer (e.g.: \code{SE$CALC_RISE=1}, \code{SE$CALC_SET=2}, \code{SE$CALC_MTRANSIT=4}, \code{SE$CALC_ITRANSIT=8})
 //' @details
 //' \describe{
 //'   \item{swe_sol_eclipse_when_loc()}{Find the next solar eclipse for a given geographic position.}
@@ -308,8 +308,8 @@ Rcpp::List fixstar2_mag(Rcpp::CharacterVector starname) {
 //'   SE$HELFLAG_HIGH_PRECISION+SE$HELFLAG_OPTICAL_PARAMS,-1,124,2,120,0,-45)
 //' swe_heliacal_angle(1234567.5,c(0,50,10),c(1013.25,15,20,0.25),c(25,1,1,1,5,0.8),
 //'   SE$HELFLAG_HIGH_PRECISION+SE$HELFLAG_OPTICAL_PARAMS,-1,124,120,0,-45)
-//' @return \code{swe_sol_eclipse_when_loc} returns a list with named entries: 
-//'      \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector, 
+//' @return \code{swe_sol_eclipse_when_loc} returns a list with named entries:
+//'      \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector,
 //'      \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
 //' @rdname Section6
 //' @export
@@ -326,7 +326,7 @@ Rcpp::List sol_eclipse_when_loc(double jd_start, int ephe_flag, Rcpp::NumericVec
     );
 }
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_lun_eclipse_when_loc()}{Find the next lunar eclipse for a given geographic position.}
 //' }
@@ -350,7 +350,7 @@ Rcpp::List lun_eclipse_when_loc(double jd_start, int ephe_flag, Rcpp::NumericVec
   );
 }
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_lun_eclipse_how()}{Compute the attributes of a lunar eclipse for a given time.}
 //' }
@@ -373,11 +373,12 @@ Rcpp::List lun_eclipse_how(double jd_ut, int ephe_flag, Rcpp::NumericVector geop
 }
 
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_lun_eclipse_when()}{Find the next lunar eclipse on earth.}
 //' }
-//' @param ifltype eclipse type as integer (e.g.: SE$ECL_CENTRAL=1,SE$ECL_NONCENTRAL=2,SE$ECL_TOTAL=4,SE$ECL_ANNULAR=8,SE$ECL_PARTIAL=16,SE$ECL_ANNULAR_TOTAL=32)
+//' @param ifltype eclipse type as integer (\code{SE$ECL_CENTRAL=1}, \code{SE$ECL_NONCENTRAL=2},
+//'  \code{SE$ECL_TOTAL=4}, \code{SE$ECL_ANNULAR=8}, \code{SE$ECL_PARTIAL=16} or \code{SE$ECL_ANNULAR_TOTAL=32})
 //' @return \code{swe_lun_eclipse_when} returns a list with named entries:
 //'      \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector
 //'      and \code{serr} error warning as string
@@ -393,12 +394,12 @@ Rcpp::List lun_eclipse_when(double jd_start, int ephe_flag, int ifltype, bool ba
   );
 }
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_rise_trans_true_hor()}{Compute the times of rising, setting and meridian transits for planets, asteroids, the moon, and the fixed stars for a local horizon that has an altitude. }
 //' }
 //' @return \code{swe_rise_trans_true_hor} returns a list with named entries: \code{return} status flag as integer,
-//'      \code{tret} for azimuth/altitude info as numeric vector and \code{serr} error message as string
+//'      \code{tret} for azimuth/altitude info as double and \code{serr} error message as string
 //' @rdname Section6
 //' @export
 // [[Rcpp::export(swe_rise_trans_true_hor)]]
@@ -414,7 +415,7 @@ Rcpp::List rise_trans_true_hor(double jd_ut, int ipl, std::string starname, int 
 }
 
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_pheno_ut()}{Compute phase, phase angle, elongation, apparent diameter, apparent magnitude for the Sun, the Moon, all planets and asteroids (UT)}
 //' }
@@ -434,7 +435,7 @@ Rcpp::List pheno_ut(double jd_ut, int ipl, int ephe_flag) {
 }
 
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_pheno()}{Compute phase, phase angle, elongation, apparent diameter, apparent magnitude for the Sun, the Moon, all planets and asteroids (ET).}
 //' }
@@ -453,7 +454,7 @@ Rcpp::List pheno(double jd_et, int ipl, int ephe_flag) {
   );
 }
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_azalt()}{Compute the horizontal coordinates (azimuth and altitude) of a planet or a star from either ecliptical or equatorial coordinates.}
 //' }
@@ -470,10 +471,10 @@ Rcpp::List azalt(double jd_ut, int coord_flag, Rcpp::NumericVector geopos, doubl
 }
 
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_azalt_rev()}{compute either ecliptical or equatorial coordinates from azimuth and true altitude.
-//' If only an apparent altitude is given, the true altitude has to be computed first with 
+//' If only an apparent altitude is given, the true altitude has to be computed first with
 //' e.g. the function swe_refrac_extended().}
 //' }
 //' @return \code{swe_azalt_rev} returns a list with named entries:
@@ -488,11 +489,11 @@ Rcpp::List azalt_rev(double jd_ut, int coord_flag, Rcpp::NumericVector geopos, R
   return Rcpp::List::create(Rcpp::Named("xout") = xout);
 }
 
-//' @details 
+//' @details
 //' \describe{
-//' \item{swe_refrac_extended()}{Calculate either the topocentric altitude from the apparent altitude 
+//' \item{swe_refrac_extended()}{Calculate either the topocentric altitude from the apparent altitude
 //' or the apparent altitude from the topocentric altitude.
-//' It allows correct calculation of refraction for heights above sea > 0, 
+//' It allows correct calculation of refraction for heights above sea > 0,
 //' where the ideal horizon and planets that are visible may have a negative altitude. }
 //' }
 //' @param InAlt  object's apparent/topocentric altitude as double (depending on calc_flag) (deg)
@@ -510,9 +511,9 @@ Rcpp::List refrac_extended(double InAlt, double height, double atpress, double a
                             Rcpp::Named("dret") = dret);
 }
 
-//' @details 
+//' @details
 //' \describe{
-//' \item{swe_heliacal_ut()}{Compute the Julian day of the next heliacal phenomenon after a given UT start date. 
+//' \item{swe_heliacal_ut()}{Compute the Julian day of the next heliacal phenomenon after a given UT start date.
 //' It works between geographic latitudes 60 South and 60 North.}
 //' }
 //' @param jd_utstart  UT Julian day number as double (day)
@@ -539,10 +540,10 @@ Rcpp::List heliacal_ut(double jd_utstart, Rcpp::NumericVector dgeo, Rcpp::Numeri
                             Rcpp::Named("serr") = std::string(serr.begin()));
 }
 
-//' @details 
+//' @details
 //' \describe{
-//' \item{swe_vis_limit_mag()}{Determine the limiting visual magnitude in dark skies. If the visual magnitude mag of an object is known 
-//' for a given date (e. g. from a call of function swe_pheno_ut(), and if magnitude is smaller than the value returned 
+//' \item{swe_vis_limit_mag()}{Determine the limiting visual magnitude in dark skies. If the visual magnitude mag of an object is known
+//' for a given date (e. g. from a call of function swe_pheno_ut(), and if magnitude is smaller than the value returned
 //' by swe_vis_limit_mag(), then it is visible.}
 //' }
 //' @return \code{swe_vis_limit_mag} returns a list with named entries: \code{return} status flag as integer,
@@ -562,11 +563,11 @@ Rcpp::List vis_limit_mag(double jd_ut, Rcpp::NumericVector dgeo, Rcpp::NumericVe
                             Rcpp::Named("serr") = std::string(serr.begin()));
 }
 
-//' @details 
+//' @details
 //' \describe{
-//' \item{swe_heliacal_pheno_ut()}{Provide data that are relevant for the calculation of heliacal risings and settings. 
-//' This function does not provide data of heliacal risings and settings itself, just some 
-//' additional data mostly used for test purposes. To calculate heliacal risings and settings, 
+//' \item{swe_heliacal_pheno_ut()}{Provide data that are relevant for the calculation of heliacal risings and settings.
+//' This function does not provide data of heliacal risings and settings itself, just some
+//' additional data mostly used for test purposes. To calculate heliacal risings and settings,
 //' use the function swe_heliacal_ut().}
 //' }
 //' @return \code{swe_heliacal_pheno_ut} returns a list with named entries: \code{return} status flag as integer
@@ -586,7 +587,7 @@ Rcpp::List heliacal_pheno_ut(double jd_ut, Rcpp::NumericVector dgeo, Rcpp::Numer
                             Rcpp::Named("serr") = std::string(serr.begin()));
 }
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_topo_arcus_visionis()}{Compute topocentric arcus visionis.}
 //' }
@@ -613,7 +614,7 @@ Rcpp::List topo_arcus_visionis(double jd_ut, Rcpp::NumericVector dgeo, Rcpp::Num
                             Rcpp::Named("serr") = std::string(serr.begin()));
 }
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_heliacal_angle()}{Compute heliacal angle.}
 //' }
@@ -636,23 +637,23 @@ Rcpp::List heliacal_angle(double jd_ut, Rcpp::NumericVector dgeo, Rcpp::NumericV
 
 // to be added in future:
 // swe_sol_eclipse_when_glob( tjd...) finds the next eclipse globally.
-// swe_sol_eclipse_where() computes the geographic location of a solar eclipse for a given tjd. 
+// swe_sol_eclipse_where() computes the geographic location of a solar eclipse for a given tjd.
 // swe_sol_eclipse_how() computes attributes of a solar eclipse for a given tjd, geographic longitude, latitude and height.
 
 // swe_lun_occult_when_loc( tjd...) finds the next occultation for a body and a given geographic position.
 // swe_lun_occult_when_glob( tjd...) finds the next occultation of a given body globally.
-// swe_lun_occult_where() computes the geographic location of an occultation for a given tjd. 
+// swe_lun_occult_where() computes the geographic location of an occultation for a given tjd.
 
 
 //////////////////////////////////////////////////////////////////////////
 //' @title Section 7: Date and time conversion functions
 //' @name Section7
 //' @description Functions related to calendar and time conversions.
-//' @seealso \url{http://www.astro.com/swisseph/swephprg.htm#_Toc505244873}
+//' @seealso Section 7 in \url{http://www.astro.com/swisseph/swephprg.htm}
 //' @details
 //' \describe{
 //'   \item{swe_julday()}{Convert calendar dates to the astronomical time scale which measures time in Julian day number.}
-//'   \item{swe_date_conversion()}{Convert calendar dates to the astronomical time scale which measures time in Julian day 
+//'   \item{swe_date_conversion()}{Convert calendar dates to the astronomical time scale which measures time in Julian day
 //'   number and checks if the calendar date is legal.}
 //'   \item{swe_revjul()}{Compute year, month, day and hour from a Julian day number.}
 //' }
@@ -669,7 +670,7 @@ Rcpp::List heliacal_angle(double jd_ut, Rcpp::NumericVector dgeo, Rcpp::NumericV
 //' @rdname Section7
 //' @export
 // [[Rcpp::export(swe_julday)]]
-double julday(int year, int month, int day, double hour, int gregflag) { 
+double julday(int year, int month, int day, double hour, int gregflag) {
     double i;
     i = swe_julday(year, month, day, hour, gregflag);
   return i;
@@ -681,7 +682,7 @@ double julday(int year, int month, int day, double hour, int gregflag) {
 //' @rdname Section7
 //' @export
 // [[Rcpp::export(swe_date_conversion)]]
-Rcpp::List date_conversion(int year, int month, int day, double hour, char cal) { 
+Rcpp::List date_conversion(int year, int month, int day, double hour, char cal) {
   double jd;
   int i = swe_date_conversion(year, month, day, hour, cal, &jd);
   return Rcpp::List::create(Rcpp::Named("return") = i,
@@ -694,7 +695,7 @@ Rcpp::List date_conversion(int year, int month, int day, double hour, char cal) 
 //' @rdname Section7
 //' @export
 // [[Rcpp::export(swe_revjul)]]
-Rcpp::List revjul(double jd, int gregflag ) { 
+Rcpp::List revjul(double jd, int gregflag ) {
   int year;
   int month;
   int day;
@@ -711,9 +712,9 @@ Rcpp::List revjul(double jd, int gregflag ) {
 //' @title Section 8: Delta T-related functions
 //' @name Section8
 //' @description Functions related to DeltaT and tidal acceleration
-//' @seealso \url{http://www.astro.com/swisseph/swephprg.htm#_Toc505244878}
+//' @seealso Section 8 in \url{http://www.astro.com/swisseph/swephprg.htm}
 //' @param ephe_flag  ephemeris flag as integer (SE$FLG_JPLEPH=1, SE$FLG_SWIEPH=2 or SE$FLG_MOSEPH=4) (section 2.3.2)
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_deltat_ex()}{Determine DeltaT from Julian day number for a specific ephemeris.}
 //' }
@@ -735,7 +736,7 @@ Rcpp::List revjul(double jd, int gregflag ) {
 Rcpp::List deltat_ex(Rcpp::NumericVector jd_ut, int ephe_flag) {
   Rcpp::NumericVector deltat(jd_ut.length());
   Rcpp::CharacterVector serr_(jd_ut.length());
-  
+
   for (int i = 0; i < jd_ut.length(); ++i) {
     std::array<char, 256> serr{'\0'};
     deltat(i) = swe_deltat_ex(jd_ut(i), ephe_flag, &serr[0]);
@@ -745,7 +746,7 @@ Rcpp::List deltat_ex(Rcpp::NumericVector jd_ut, int ephe_flag) {
                             Rcpp::Named("serr") = serr_);
 }
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_deltat()}{Determine DeltaT from Julian day number for a used ephemeris.
 //' This function is only safe if:
@@ -766,7 +767,7 @@ Rcpp::NumericVector deltat(Rcpp::NumericVector jd_ut) {
   return result;
 }
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_set_tid_acc()}{Set the tidal acceleration.}
 //' }
@@ -777,7 +778,7 @@ void set_tid_acc(double t_acc) {
   swe_set_tid_acc(t_acc);
 }
 
-//' @details 
+//' @details
 //' \describe{
 //' \item{swe_get_tid_acc()}{Get the present configured tidal acceleration.}
 //' }
@@ -789,9 +790,9 @@ double get_tid_acc() {
   return swe_get_tid_acc();
 }
 
-//' @details 
+//' @details
 //' \describe{
-//' \item{swe_set_delta_t_userdef()}{Allows the user to set a fixed DeltaT value that will 
+//' \item{swe_set_delta_t_userdef()}{Allows the user to set a fixed DeltaT value that will
 //' be returned by swe_deltat() or swe_deltat_ex().}
 //' }
 //' @rdname Section8
@@ -805,10 +806,10 @@ void set_delta_t_userdef (double delta_t) {
 //' @title Section 9: The function for calculating topocentric planet position
 //' @name Section9
 //' @description Function for topocentric planet positions
-//' @seealso \url{http://www.astro.com/swisseph/swephprg.htm#_Toc505244884}
+//' @seealso Section 9 in \url{http://www.astro.com/swisseph/swephprg.htm}
 //' @details
 //' \describe{
-//'   \item{we_set_topo{}}{Set the topocentric location of the observer.}
+//' \item{swe_set_topo()}{Set the topocentric location of the observer.}
 //' }
 //' @param longitude  Geographic longitude as double (deg)
 //' @param lat  Geographic latitude as double (deg)
@@ -823,10 +824,235 @@ void set_topo(double longitude, double lat, double height) {
 }
 
 //////////////////////////////////////////////////////////////////////////
+//' @title Section 10: Sidereal mode functions
+//' @name Section10
+//' @description Functions to support the determination of sidereal information
+//' @seealso Section 10 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @param iflag Computation flag as integer, many options possible (section 2.3,1)
+//' @param sid_mode  Sidereal mode as integer
+//' @details
+//' \describe{
+//' \item{swe_set_sid_mode()}{Set the mode for sidereal computations.}
+//' }
+//' @param t0  Reference date as double (day)
+//' @param ayan_t0  The initial latitude value of the ayanamsa as double (deg)
+//' @examples
+//' data(SE)
+//' swe_set_sid_mode(SE$SIDM_FAGAN_BRADLEY,0,0)
+//' swe_get_ayanamsa_name(SE$SIDM_FAGAN_BRADLEY)
+//' swe_get_ayanamsa_ex_ut(2458346.82639,SE$FLG_MOSEPH)
+//' swe_get_ayanamsa_ex(2458346.82639,SE$FLG_MOSEPH)
+//' @rdname Section10
+//' @export
+// [[Rcpp::export(swe_set_sid_mode)]]
+void set_sid_mode(int sid_mode, double t0, double ayan_t0) {
+  swe_set_sid_mode(sid_mode, t0, ayan_t0);
+}
+
+//' @details
+//' \describe{
+//' \item{swe_get_ayanamsa_name()}{Get the mode name for sidereal computations.}
+//' }
+//' @return \code{swe_get_ayanamsa_name} returns name of ayanamsa method as string
+//' @rdname Section10
+//' @export
+// [[Rcpp::export(swe_get_ayanamsa_name)]]
+std::string get_ayanamsa_name(int sid_mode) {
+  return std::string(swe_get_ayanamsa_name(sid_mode));
+}
+
+//' @details
+//' \describe{
+//' \item{swe_get_ayanamsa_ex_ut()}{It computes ayanamsa using UT.}
+//' }
+//' @param jd_ut  UT Julian day number as double (day)
+//' @return \code{swe_get_ayanamsa_ex_ut} returns a list with named entries: \code{return} status flag as integer,
+//'      \code{daya} ayanamsa value as double and \code{serr} error message as string
+//' @rdname Section10
+//' @export
+// [[Rcpp::export(swe_get_ayanamsa_ex_ut)]]
+Rcpp::List get_ayanamsa_ex_ut(double jd_ut, int iflag){
+  double daya;
+  std::array<char, 256> serr{'\0'};
+  int i = swe_get_ayanamsa_ex_ut(jd_ut, iflag,  &daya, serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = i,
+                            Rcpp::Named("daya") = daya,
+                            Rcpp::Named("serr") = std::string(serr.begin()));
+}
+
+//' @details
+//' \describe{
+//' \item{swe_get_ayanamsa_ex()}{It computes ayanamsa using ET.}
+//' }
+//' @param jd_et  ET Julian day number as double (day)
+//' @return \code{swe_get_ayanamsa_ex} returns a list with named entries: \code{return} status flag as integer,
+//'      \code{daya} ayanamsa value as double and \code{serr} error message as string
+//' @rdname Section10
+//' @export
+// [[Rcpp::export(swe_get_ayanamsa_ex)]]
+Rcpp::List get_ayanamsa_ex(double jd_et, int iflag){
+  double daya;
+  std::array<char, 256> serr{'\0'};
+  int i = swe_get_ayanamsa_ex(jd_et, iflag,  &daya, serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = i,
+                            Rcpp::Named("daya") = daya,
+                            Rcpp::Named("serr") = std::string(serr.begin()));
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+//' @title Section 13: House cusp, ascendant and Medium Coeli calculations
+//' @name Section13
+//' @description Calculate house cusp, ascendant, Medium Coeli, etc. calculations
+//' @seealso Section 13 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @param geolat  geographic latitude as double (deg)
+//' @param geolon  geographic longitude as double (deg)
+//' @param hsys  house method, one-letter case sensitive as char
+//' @details
+//' \describe{
+//' \item{swe_houses_ex()}{Calculate houses' cusps, ascendant, Medium Coeli (MC), etc.}
+//' }
+//' @param jd_ut  UT Julian day number as double (day)
+//' @param cuspflag cusp flag as integer (0 [tropical], SE$FLG_SIDEREAL, SE$FLG_RADIANS)
+//' @return \code{swe_houses_ex} returns a list with named entries: \code{return} status flag as integer,
+//'      \code{cusps} cusps values as double and \code{ascmc} ascendent, MCs. etc. as double.
+//' @examples
+//' swe_houses_ex(1234567, 0, 53, 0, 'B')
+//' @rdname Section13
+//' @export
+// [[Rcpp::export(swe_houses_ex)]]
+Rcpp::List houses_ex(double jd_ut, int cuspflag,double geolat, double geolon, char hsys){
+  std::array<double, 37> cusps{0.0};
+  std::array<double, 10> ascmc{0.0};
+  int i = swe_houses_ex(jd_ut, cuspflag,geolat,geolon, hsys, cusps.begin(), ascmc.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = i,
+                            Rcpp::Named("cusps") = cusps,
+                            Rcpp::Named("ascmc") = ascmc);
+}
+
+
+//' @details
+//' \describe{
+//' \item{swe_houses_armc()}{Calculate houses' information from the right ascension of the Medium Coeli (MC).}
+//' }
+//' @param armc  right ascension of the MC as double (deg)
+//' @param eps  ecliptic obliquity as double (deg)
+//' @return \code{swe_houses_armc} returns a list with named entries: \code{return} status flag as integer,
+//'      \code{cusps} cusps values as double and \code{ascmc} ascendent, MCs, etc. as double.
+//' @examples
+//' swe_houses_armc(12, 53, 23, 'B')
+//' @rdname Section13
+//' @export
+// [[Rcpp::export(swe_houses_armc)]]
+Rcpp::List houses_armc(double armc, double geolat, double eps, char hsys){
+  std::array<double, 37> cusps{0.0};
+  std::array<double, 10> ascmc{0.0};
+  int i = swe_houses_armc(armc,geolat,eps, hsys, cusps.begin(), ascmc.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = i,
+                            Rcpp::Named("cusps") = cusps,
+                            Rcpp::Named("ascmc") = ascmc);
+}
+
+//' @details
+//' \describe{
+//' \item{swe_houses_name()}{Provide the house name.}
+//' }
+//' @return \code{swe_house_name} returns the house name as string
+//' @examples
+//' swe_house_name('G')
+//' @rdname Section13
+//' @export
+// [[Rcpp::export(swe_house_name)]]
+std::string house_name(char hsys) {
+    return std::string(swe_house_name(hsys));
+}
+
+//////////////////////////////////////////////////////////////////////////
+//' @title Section 14: House position calculations
+//' @name Section14
+//' @description Calculate house position of a given body.
+//' @seealso Section 14 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @param geolat  geographic latitude as double (deg)
+//' @param hsys  house method, one-letter case sensitive as char
+//' @param armc  right ascension of the MC as double (deg)
+//' @param eps  ecliptic obliquity as double (deg)
+//' @param xpin  longitude and latitude of the given body as numeric vector (deg)
+//' @details
+//' \describe{
+//' \item{swe_house_pos()}{Calculate house position of given body.}
+//' }
+//' @return \code{swe_house_pos} returns a list with named entries: \code{return} how far from body's cusp as double,
+//'      and \code{serr} error message as string.
+//' @examples
+//' swe_house_pos(12, 53, 23, 'B', c(0,0))
+//' @rdname Section14
+//' @export
+// [[Rcpp::export(swe_house_pos)]]
+Rcpp::List house_pos(double armc, double geolat, double eps, char hsys ,Rcpp::NumericVector xpin){
+  std::array<char, 256> serr{'\0'};
+  double i = swe_house_pos(armc,geolat,eps, hsys, xpin.begin(), serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = i,
+                            Rcpp::Named("serr") =  std::string(serr.begin()));
+}
+
+
+//' @details
+//' \describe{
+//' \item{swe_gauquelin_sector()}{Compute the Gauquelin sector position of a planet or star. }
+//' }
+//' @param ipl  Body/planet as integer (\code{SE$SUN=0}, \code{SE$MOON=1}, ... \code{SE$PLUTO=9})
+//' @param starname  Star name as string (\code{""} for no star)
+//' @param jd_ut  UT Julian day number as double (day)
+//' @param geopos position as numeric vector (longitude, latitude, height)
+//' @param atpress Atmospheric pressure as double (hPa)
+//' @param attemp Atmospheric temperature as double (Celsius)
+//' @param ephe_flag Ephemeris flag as integer (\code{SE$FLG_JPLEPH=1}, \code{SE$FLG_SWIEPH=2} or \code{SE$FLG_MOSEPH=4})
+//' @param imeth Gauquelin method as integer (0, 1, 2, 3, 4 or 5)
+//' @examples
+//' data(SE)
+//' swe_gauquelin_sector(1234567.5,SE$VENUS,"",SE$FLG_MOSEPH,0,c(0,50,10),1013.25,15)
+//' @return \code{swe_gauquelin_sector} returns a list with named entries: \code{return} status flag as integer,
+//'      \code{dgsect} for Gauquelin sector as double and \code{serr} error message as string
+//' @rdname Section14
+//' @export
+// [[Rcpp::export(swe_gauquelin_sector)]]
+Rcpp::List gauquelin_sector(double jd_ut, int ipl, std::string starname, int ephe_flag, int imeth,Rcpp::NumericVector geopos, double atpress, double attemp) {
+  if (geopos.length() < 3) Rcpp::stop("Geographic position 'geopos' must have a length of 3");
+  std::array<char, 256> serr{'\0'};
+  double dgsect;
+  starname.resize(41);
+  int i = swe_gauquelin_sector(jd_ut, ipl, &starname[0], ephe_flag, imeth, geopos.begin(), atpress, attemp, &dgsect, serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = i,
+                            Rcpp::Named("dgsect") = dgsect,
+                            Rcpp::Named("serr") = std::string(serr.begin()));
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+//' @title Section 15: Sidereal time
+//' @name Section15
+//' @description Calculate the sidereal time (in degrees).
+//' @seealso Section 15 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @details
+//' \describe{
+//' \item{swe_sidtime()}{Determine the sidereal time.}
+//' }
+//' @param jd_ut  UT Julian day number as double (day)
+//' @return \code{swe_sidtime} returns the sidereal time as double (deg)
+//' @examples
+//' swe_sidtime(2451545)
+//' @rdname Section15
+//' @export
+// [[Rcpp::export(swe_sidtime)]]
+double sidtime(double jd_ut) {
+  return swe_sidtime(jd_ut);
+}
+
+//////////////////////////////////////////////////////////////////////////
 //' @title Section 16.7: Other functions that may be useful
 //' @name Section16
 //' @description Useful functions
-//' @seealso \url{http://www.astro.com/swisseph/swephprg.htm#_Toc505244906}
+//' @seealso Section 16.7 in \url{http://www.astro.com/swisseph/swephprg.htm}
 //' @details
 //' \describe{
 //'   \item{swe_day_of_week()}{Determine day of week from Julian day number.}

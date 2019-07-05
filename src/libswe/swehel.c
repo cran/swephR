@@ -1,18 +1,18 @@
-/* SWISSEPH 
+/* SWISSEPH
  $Header: /home/dieter/sweph/RCS/swehel.c,v 1.1 2009/04/21 06:05:59 dieter Exp dieter $
 
   Heliacal risings and related calculations
-  
+
   Author: Victor Reijs
   This program code is a translation of part of:
   Victor Reijs' software ARCHAEOCOSMO (archaeoastronomy and
-  geodesy functions), 
+  geodesy functions),
   http://www.iol.ie/~geniet/eng/archaeocosmoprocedures.htm
 
   Translation from VB into C by Dieter Koch
 
   Problem reports can be sent to victor.reijs@gmail.com or dieter@astro.ch
-  
+
   Copyright (c) Victor Reijs, 2008
 
   License conditions
@@ -23,7 +23,7 @@
   Swiss Ephemeris is distributed with NO WARRANTY OF ANY KIND.  No author
   or distributor accepts any responsibility for the consequences of using it,
   or for whether it serves any particular purpose or works at all, unless he
-  or she says so in writing.  
+  or she says so in writing.
 
   Swiss Ephemeris is made available by its authors under a dual licensing
   system. The software developer, who uses any part of Swiss Ephemeris
@@ -42,7 +42,7 @@
   See http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
   If the developer choses the Swiss Ephemeris Professional license,
-  he must follow the instructions as found in http://www.astro.com/swisseph/ 
+  he must follow the instructions as found in http://www.astro.com/swisseph/
   and purchase the Swiss Ephemeris Professional Edition from Astrodienst
   and sign the corresponding license contract.
 
@@ -78,7 +78,7 @@
 #define Min2Deg   (1.0 / 60.0)
 #define DEBUG  0
 #define DONE  1
-#define MaxTryHours   4 
+#define MaxTryHours   4
 #define TimeStepDefault	1
 #define LocalMinStep	8
 
@@ -181,9 +181,9 @@ static double CVA(double B, double SN, int32 helflag)
   //if (B < BNIGHT)
   if (B < 1394)  /* use this value for BNIGHT to make the function continous */
     is_scotopic = TRUE;
-  if (helflag & SE_HELFLAG_VISLIM_PHOTOPIC) 
+  if (helflag & SE_HELFLAG_VISLIM_PHOTOPIC)
     is_scotopic = FALSE;
-  if (helflag & SE_HELFLAG_VISLIM_SCOTOPIC) 
+  if (helflag & SE_HELFLAG_VISLIM_SCOTOPIC)
     is_scotopic = TRUE;
   if (is_scotopic)
     return mymin(900, 380 / SN * pow(10, (0.3 * pow(B, (-0.29))))) / 60.0 / 60.0;
@@ -258,9 +258,9 @@ static double OpticFactor(double Bback, double kX, double *dobs, double JDNDaysU
   //if (Bback < BNIGHT)
   if (Bback < 1645) /* use this value for BNIGHT to make the function continuous */
     is_scotopic = TRUE;
-  if (helflag & SE_HELFLAG_VISLIM_PHOTOPIC) 
+  if (helflag & SE_HELFLAG_VISLIM_PHOTOPIC)
     is_scotopic = FALSE;
-  if (helflag & SE_HELFLAG_VISLIM_SCOTOPIC) 
+  if (helflag & SE_HELFLAG_VISLIM_SCOTOPIC)
     is_scotopic = TRUE;
   if (is_scotopic) {
     Fe = pow(10, (0.48 * kX));
@@ -291,7 +291,7 @@ static double OpticFactor(double Bback, double kX, double *dobs, double JDNDaysU
   fprintf(stderr, "Fcb=%f\n", Fcb);
   fprintf(stderr, "Fr =%f\n", Fr );
 #endif
-  if (TypeFactor == 0) 
+  if (TypeFactor == 0)
     return Fb * Fe * Ft * Fp * Fa * Fr * Fsc * Fci;
   else
     return Fb * Ft * Fp * Fa * Fm * Fsc * Fcb;
@@ -333,7 +333,7 @@ static int32 DeterObject(char *ObjectName)
 }
 
 #if 0
-int32 call_swe_calc(double tjd, int32 ipl, int32 iflag, double *x, char *serr) 
+int32 call_swe_calc(double tjd, int32 ipl, int32 iflag, double *x, char *serr)
 {
   int32 retval = OK, ipli, i;
   double dtjd;
@@ -341,26 +341,26 @@ int32 call_swe_calc(double tjd, int32 ipl, int32 iflag, double *x, char *serr)
   static TLS double xsv[3][6];
   static TLS int32 iflagsv[3];
   ipli = ipl;
-  if (ipli > SE_MOON) 
+  if (ipli > SE_MOON)
     ipli = 2;
   dtjd = tjd - tjdsv[ipli];
   if (tjdsv[ipli] != 0 && iflag == iflagsv[ipli] && fabs(dtjd) < 5.0 / 1440.0) {
-    for (i = 0; i < 3; i++) 
+    for (i = 0; i < 3; i++)
       x[i] = xsv[ipli][i] + dtjd * xsv[ipli][i+3];
-    for (i = 3; i < 6; i++) 
+    for (i = 3; i < 6; i++)
       x[i] = xsv[ipli][i];
   } else {
     retval = swe_calc(tjd, ipl, iflag, x, serr);
     tjdsv[ipli] = tjd;
     iflagsv[ipli] = iflag;
-    for (i = 0; i < 6; i++) 
+    for (i = 0; i < 6; i++)
       xsv[ipli][i] = x[i];
   }
   return retval;
 }
 #endif
 
-/* avoids problems with star name string that may be overwritten by 
+/* avoids problems with star name string that may be overwritten by
    swe_fixstar() */
 static int32 call_swe_fixstar(char *star, double tjd, int32 iflag, double *xx, char *serr)
 {
@@ -371,7 +371,7 @@ static int32 call_swe_fixstar(char *star, double tjd, int32 iflag, double *xx, c
   return retval;
 }
 
-/* avoids problems with star name string that may be overwritten by 
+/* avoids problems with star name string that may be overwritten by
    swe_fixstar_mag() */
 static int32 call_swe_fixstar_mag(char *star, double *mag, char *serr)
 {
@@ -390,7 +390,7 @@ static int32 call_swe_fixstar_mag(char *star, double *mag, char *serr)
   return retval;
 }
 
-/* avoids problems with star name string that may be overwritten by 
+/* avoids problems with star name string that may be overwritten by
    swe_fixstar() */
 static int32 call_swe_rise_trans(double tjd, int32 ipl, char *star, int32 helflag, int32 eventtype, double *dgeo, double atpress, double attemp, double *tret, char *serr)
 {
@@ -402,11 +402,11 @@ static int32 call_swe_rise_trans(double tjd, int32 ipl, char *star, int32 helfla
   return retval;
 }
 
-/* 
+/*
  * Written by Dieter Koch:
- * Fast function for risings and settings of planets, can be used instead of 
+ * Fast function for risings and settings of planets, can be used instead of
  * swe_rise_trans(), which is much slower.
- * For circumpolar and near-circumpolar planets use swe_rise_trans(), or 
+ * For circumpolar and near-circumpolar planets use swe_rise_trans(), or
  * generally use it for geographical latitudes higher than 58N/S.
  * For fixed stars, swe_rise_trans() is fast enough.
  */
@@ -420,7 +420,7 @@ static int32 calc_rise_and_set(double tjd_start, int32 ipl, double *dgeo, double
   int32 iflag = helflag & (SEFLG_JPLEPH|SEFLG_SWIEPH|SEFLG_MOSEPH);
   int32 epheflag = iflag;
   iflag |= SEFLG_EQUATORIAL;
-  if (!(helflag & SE_HELFLAG_HIGH_PRECISION)) 
+  if (!(helflag & SE_HELFLAG_HIGH_PRECISION))
     iflag |= SEFLG_NONUT|SEFLG_TRUEPOS;
   if (swe_calc_ut(tjd0, SE_SUN, iflag, xs, serr) == 0) {
     if (serr != NULL)
@@ -460,7 +460,7 @@ if (eventflag & SE_CALC_RISE) {
   }
   /* apparent radius of solar disk (ignoring refraction) */
   rdi = 0;
-  if (ipl == SE_SUN) 
+  if (ipl == SE_SUN)
     rdi = asin(696000000.0 / 1.49597870691e+11 / xx[2]) / DEGTORAD;
   else if (ipl == SE_MOON)
     rdi = asin(1737000.0 / 1.49597870691e+11 / xx[2]) / DEGTORAD;
@@ -479,12 +479,12 @@ else
   tjdrise = tjdnoon + sda / 360.0;
   /*ph->tset = tjd_start + sda / 360.0;*/
   /* now calculate more accurate rising and setting times.
-   * use vertical speed in order to determine crossing of the horizon  
+   * use vertical speed in order to determine crossing of the horizon
    * refraction of 34' and solar disk diameter of 16' = 50' = 0.84 deg */
   iflag = epheflag|SEFLG_SPEED|SEFLG_EQUATORIAL;
   if (ipl == SE_MOON)
     iflag |= SEFLG_TOPOCTR;
-  if (!(helflag & SE_HELFLAG_HIGH_PRECISION)) 
+  if (!(helflag & SE_HELFLAG_HIGH_PRECISION))
     iflag |= SEFLG_NONUT|SEFLG_TRUEPOS;
   for (i = 0; i < 2; i++) {
     if (swe_calc_ut(tjdrise, ipl, iflag, xx, serr) == SE_ERR) {
@@ -492,7 +492,7 @@ else
       return SE_ERR;
     }
     swe_azalt(tjdrise, SE_EQU2HOR, dgeo, datm[0], datm[1], xx, xaz);
-    xx[0] -= xx[3] * dfac; 
+    xx[0] -= xx[3] * dfac;
     xx[1] -= xx[4] * dfac;
     swe_azalt(tjdrise - dfac, SE_EQU2HOR, dgeo, datm[0], datm[1], xx, xaz2);
     tjdrise -= (xaz[1] - rh) / (xaz[1] - xaz2[1]) *  dfac;
@@ -662,7 +662,7 @@ static double HourAngle(double TopoAlt, double TopoDecl, double Lat)
   double decli = TopoDecl * DEGTORAD;
   double Lati = Lat * DEGTORAD;
   double ha = (sin(Alti) - sin(Lati) * sin(decli)) / cos(Lati) / cos(decli);
-  if (ha < -1) ha = -1; 
+  if (ha < -1) ha = -1;
   if (ha > 1) ha = 1;
   /* from http://star-www.st-and.ac.uk/~fv/webnotes/chapt12.htm*/
   return acos(ha) / DEGTORAD / 15.0;
@@ -860,7 +860,7 @@ static double kR(double AltS, double HeightEye)
 
 static int Sgn(double x)
 {
-  if (x < 0) 
+  if (x < 0)
     return -1;
   return 1;
 }
@@ -892,7 +892,7 @@ static double ka(double AltS, double sunra, double Lat, double HeightEye, double
     if (VR >= 1) {
       /* Visbility range from http://www1.cs.columbia.edu/CAVE/publications/pdfs/Narasimhan_CVPR03.pdf
        * http://www.icao.int/anb/SG/AMOSSG/meetings/amossg3/wp/SN11Rev.pdf where MOR=2.995/ke
-       * factor 1.3 is the relation between "prevailing visibility" and 
+       * factor 1.3 is the relation between "prevailing visibility" and
        * meteorological range was derived by Koshmeider in the 1920's */
       BetaVr = 3.912 / VR;
       Betaa = BetaVr - (kW(HeightEye, TempS, RH) / scaleHwater + kR(AltS, HeightEye) / scaleHrayleigh) * 1000 * astr2tau;
@@ -1083,7 +1083,7 @@ static double Bn(double AltO, double JDNDayUT, double AltS, double sunra, double
   /*YearB = DatefromJDut(JDNDayUT, 1);
     MonthB = DatefromJDut(JDNDayUT, 2);
     DayB = DatefromJDut(JDNDayUT, 3);*/
-  swe_revjul(JDNDayUT, SE_GREG_CAL, &iyar, &imon, &iday, &dut); 
+  swe_revjul(JDNDayUT, SE_GREG_CAL, &iyar, &imon, &iday, &dut);
   YearB = iyar; MonthB = imon; DayB = iday;
   Bna = B0 * (1 + 0.3 * cos(6.283 * (YearB + ((DayB - 1) / 30.4 + MonthB - 1) / 12 - 1990.33) / 11.1));
   kX = Deltam(AltO, AltS, sunra, Lat, HeightEye, datm, helflag, serr);
@@ -1133,7 +1133,7 @@ static int32 fast_magnitude(double tjd, double *dgeo, char *ObjectName, int32 he
   static TLS int32 helflagsv[3];
   ipl = DeterObject(ObjectName);
   ipli = ipl;
-  if (ipli > SE_MOON) 
+  if (ipli > SE_MOON)
     ipli = 2;
   dtjd = tjd - tjdsv[ipli];
   if (tjdsv[ipli] != 0 && helflag == helflagsv[ipli] && fabs(dtjd) < 5.0 / 1440.0) {
@@ -1292,7 +1292,7 @@ if (0) {
     }
   }
   /* if max. Bm [1E7] <5% of Bsky don't add Bm*/
-  if (Bsky < 200000000.0) 
+  if (Bsky < 200000000.0)
     Bsky += Bm(AltO, AziO, AltM, AziM, AltS, AziS, sunra, Lat, HeightEye, datm, helflag, serr);
   if (AltS <= 0)
     Bsky += Bcity(0, datm[0]);
@@ -1305,7 +1305,7 @@ if (0) {
 
 /* default handling:
  * 1. datm (atmospheric conditions):
- * datm consists of 
+ * datm consists of
  *     [0]  atmospheric pressure
  *     [1]  temperature
  *     [2]  relative humidity
@@ -1313,7 +1313,7 @@ if (0) {
  * In order to get default values for [0..2], set datm[0] = 0.
  * Default values for [1-2] are only provided if [0] == 0.
  * [3] defaults outside this function, depending on [0-2].
- * 
+ *
  * 2. dobs (observer definition):
  *     [0]  age (default 36)
  *     [1]  Snellen ratio or visual acuity of observer (default 1)
@@ -1352,7 +1352,7 @@ static void default_heliacal_parameters(double *datm, double *dgeo, double *dobs
   if (dobs[3] == 0) {
     dobs[2] = 1; /* Binocular = 1 */
     dobs[3] = 1; /* OpticMagn = 1: use eye */
-    /* dobs[4] and dobs[5] (OpticDia and OpticTrans) will be defaulted in 
+    /* dobs[4] and dobs[5] (OpticDia and OpticTrans) will be defaulted in
      * OpticFactor() */
   }
 }
@@ -1399,20 +1399,20 @@ if (0) {
   //if (Bsk < BNIGHT)
   if (Bsk < 1645) /* use this function for BNIGHT to make the function continuous */
     is_scotopic = TRUE;
-  if (helflag & SE_HELFLAG_VISLIM_PHOTOPIC) 
+  if (helflag & SE_HELFLAG_VISLIM_PHOTOPIC)
     is_scotopic = FALSE;
-  if (helflag & SE_HELFLAG_VISLIM_SCOTOPIC) 
+  if (helflag & SE_HELFLAG_VISLIM_SCOTOPIC)
     is_scotopic = TRUE;
   /* From Schaefer , Archaeoastronomy, XV, 2000, page 129*/
   if (is_scotopic) {
     C1 = 1.5848931924611e-10; /*pow(10, -9.8);*/ /* C1 = 10 ^ (-9.8);*/
     C2 = 0.012589254117942; /*pow(10, -1.9);*/ /* C2 = 10 ^ (-1.9);*/
-    if (scotopic_flag != NULL) 
+    if (scotopic_flag != NULL)
       *scotopic_flag = 1;
   } else {
     C1 = 4.4668359215096e-9; /*pow(10, -8.35);*/ /* C1 = 10 ^ (-8.35);*/
     C2 = 1.2589254117942e-6; /*pow(10, -5.9);*/ /* C2 = 10 ^ (-5.9);*/
-    if (scotopic_flag != NULL) 
+    if (scotopic_flag != NULL)
       *scotopic_flag = 0;
   }
   if (scotopic_flag != NULL) {
@@ -1448,7 +1448,9 @@ static char *tolower_string_star(char *str)
   return str;
 }
 
-/* Limiting magnitude in dark skies 
+/* Limiting magnitude in dark skies
+ * for information about input parameters, see function swe_heliacal_ut().
+ *
  * function returns:
  * -1   Error
  * -2   Object is below horizon
@@ -1587,7 +1589,7 @@ static int32 TopoArcVisionis(double Magn, double *dobs, double AltO, double AziO
   } else {
     Xm = 99;
   }
-  if (Xm < AltO) 
+  if (Xm < AltO)
     Xm = AltO;
   *dret = Xm;
   return OK;
@@ -1600,6 +1602,7 @@ int32 CALL_CONV swe_topo_arcus_visionis(double tjdut, double *dgeo, double *datm
   sunra = SunRA(tjdut, helflag, serr);
   if (serr != NULL && *serr != '\0')
     return SE_ERR;
+  default_heliacal_parameters(datm, dgeo, dobs, helflag);
   return TopoArcVisionis(mag, dobs, alt_obj, azi_obj, alt_moon, azi_moon, tjdut, azi_sun, sunra, dgeo[1], dgeo[2], datm, helflag, dret, serr);
 }
 
@@ -1619,11 +1622,11 @@ int32 CALL_CONV swe_topo_arcus_visionis(double tjdut, double *dgeo, double *datm
 ' Temperature [C]
 ' Pressure [mbar]
 ' RH [%]   relative humidity
-' VR [km]  Meteorological Range, 
+' VR [km]  Meteorological Range,
   see http://www.iol.ie/~geniet/eng/atmoastroextinction.htm
-' TypeAngle 
-'   [0=Object's altitude, 
-'    1=Arcus Visonis (Object's altitude - Sun's altitude), 
+' TypeAngle
+'   [0=Object's altitude,
+'    1=Arcus Visonis (Object's altitude - Sun's altitude),
 '    2=Sun's altitude]
 ' HeliacalAngle [deg]
 */
@@ -1694,6 +1697,7 @@ int32 CALL_CONV swe_heliacal_angle(double tjdut, double *dgeo, double *datm, dou
     return SE_ERR;
   }
   swi_set_tid_acc(tjdut, helflag, 0, serr);
+  default_heliacal_parameters(datm, dgeo, dobs, helflag);
   return HeliacalAngle(mag, dobs, azi_obj, alt_moon, azi_moon, tjdut, azi_sun, dgeo, datm, helflag, dret, serr);
 }
 
@@ -1760,7 +1764,7 @@ static int32 DeterTAV(double *dobs, double JDNDaysUT, double *dgeo, double *datm
   if (ObjectLoc(JDNDaysUT, dgeo, datm, ObjectName, 1, helflag, &AziO, serr) == SE_ERR)
     return SE_ERR;
   if (strncmp(ObjectName, "moon", 4) == 0) {
-    AltM = -90; 
+    AltM = -90;
     AziM = 0;
   } else {
     if (ObjectLoc(JDNDaysUT, dgeo, datm, "moon", 0, helflag, &AltM, serr) == SE_ERR)
@@ -1803,10 +1807,10 @@ static double funct2(double A, double B, double C, double x)
 }
 
 static void strcpy_VBsafe(char *sout, char *sin)
-{ 
-  char *sp, *sp2; 
+{
+  char *sp, *sp2;
   int iw = 0;
-  sp = sin; 
+  sp = sin;
   sp2 = sout;
   /* note, star name may begin with comma, such as ",zePsc" */
   while((isalnum(*sp) || *sp == ' ' || *sp == '-' || *sp == ',') && iw < 30) {
@@ -1818,7 +1822,9 @@ static void strcpy_VBsafe(char *sout, char *sin)
 
 /*###################################################################
 ' JDNDaysUT [JDN]
-' HPheno
+' for information about input parameters, see function swe_heliacal_ut().
+'
+' output values:
 '0=AltO [deg]		topocentric altitude of object (unrefracted)
 '1=AppAltO [deg]        apparent altitude of object (refracted)
 '2=GeoAltO [deg]        geocentric altitude of object
@@ -1836,7 +1842,7 @@ static void strcpy_VBsafe(char *sout, char *sin)
 '14=TlastVR [JDN]       last time object is visible, according to VR
 '15=TbYallop[JDN]       best time the object is visible, according to Yallop
 '16=WMoon [deg]         cresent width of moon
-'17=qYal [-]            q-test value of Yallop 
+'17=qYal [-]            q-test value of Yallop
 '18=qCrit [-]           q-test criterion of Yallop
 '19=ParO [deg]          parallax of object
 '20 Magn [-]            magnitude of object
@@ -1871,7 +1877,7 @@ int32 CALL_CONV swe_heliacal_pheno_ut(double JDNDaysUT, double *dgeo, double *da
   }
   swi_set_tid_acc(JDNDaysUT, helflag, 0, serr);
   sunra = SunRA(JDNDaysUT, helflag, serr);
-  /* note, the fixed stars functions rewrite the star name. The input string 
+  /* note, the fixed stars functions rewrite the star name. The input string
      may be too short, so we have to make sure we have enough space */
   strcpy_VBsafe(ObjectName, ObjectNameIn);
   tolower_string_star(ObjectName);
@@ -1959,7 +1965,7 @@ darr[30] = darr[26] + darr[27] + darr[28] + darr[29];
   /* If HPheno >= 11 And HPheno <= 14 Or HPheno = 24 Then*/
   /*te bepalen m.b.v. walkthrough*/
     MinTAVact = 199;
-    DeltaAlt = 0; 
+    DeltaAlt = 0;
     OldestMinTAV = 0;
     Ta = 0;
     Tc = 0;
@@ -2083,7 +2089,7 @@ int32 HeliacalJDut(double JDNDaysUTStart, double Age, double SN, double Lat, dou
 }
 #endif
 
-static double get_synodic_period(int Planet) 
+static double get_synodic_period(int Planet)
 {
   /* synodic periods from:
    * Kelley/Milone/Aveni, "Exploring ancient Skies", p. 43. */
@@ -2153,7 +2159,7 @@ static int32 moon_event_arc_vis(double JDNDaysUTStart, double *dgeo, double *dat
     phase1 = phase2;
     swe_pheno_ut(JDNDaysUT, Planet, iflag, x, serr);
     phase2 = x[0];
-    if (phase2 > phase1) 
+    if (phase2 > phase1)
       goingup = 1;
   } while (goingup == 0 || (goingup == 1 && (phase2 > phase1)));
   /* fix the date to get the day with the smallest phase (nwest moon) */
@@ -2227,21 +2233,21 @@ static int32 heliacal_ut_arc_vis(double JDNDaysUTStart, double *dgeo, double *da
     goto swe_heliacal_err;
   epheflag = helflag & (SEFLG_JPLEPH|SEFLG_SWIEPH|SEFLG_MOSEPH);
   iflag = SEFLG_TOPOCTR | SEFLG_EQUATORIAL | epheflag;
-  if (!(helflag & SE_HELFLAG_HIGH_PRECISION)) 
+  if (!(helflag & SE_HELFLAG_HIGH_PRECISION))
     iflag |= SEFLG_NONUT | SEFLG_TRUEPOS;
   /* start values for search of heliacal rise
    * maxlength = phase period in days, smaller than minimal synodic period */
   /* days per step (for heliacal rise) in power of two */
   switch(Planet) {
-    case SE_MERCURY: 
+    case SE_MERCURY:
       DayStep = 1; maxlength = 100; break;
-    case SE_VENUS: 
+    case SE_VENUS:
       DayStep = 64; maxlength = 384; break;
-    case SE_MARS: 
+    case SE_MARS:
       DayStep = 128; maxlength = 640; break;
-    case SE_JUPITER: 
+    case SE_JUPITER:
       DayStep = 64; maxlength = 384; break;
-    case SE_SATURN: 
+    case SE_SATURN:
       DayStep = 64; maxlength = 256; break;
     default:
       DayStep = 64; maxlength = 256; break;
@@ -2363,7 +2369,7 @@ static int32 heliacal_ut_arc_vis(double JDNDaysUTStart, double *dgeo, double *da
     retval = -2; /* marks "not found" within synodic period */
     sprintf(serr, "heliacal event not found within maxlength %f\n", maxlength);
     goto swe_heliacal_err;
-  } 
+  }
 #if 0
   if (helflag & SE_HELFLAG_AVKIND_VR) {
     double darr[40];
@@ -2488,11 +2494,11 @@ static int32 get_asc_obl_old(double tjd, int32 ipl, char *star, int32 iflag, dou
     if ((retval = swe_calc(tjd, ipl, epheflag | SEFLG_EQUATORIAL, x, serr)) == SE_ERR)
       return SE_ERR;
   }
-  adp = tan(dgeo[1] * DEGTORAD) * tan(x[1] * DEGTORAD); 
+  adp = tan(dgeo[1] * DEGTORAD) * tan(x[1] * DEGTORAD);
   if (fabs(adp) > 1) {
-    if (star != NULL && *star != '\0') 
+    if (star != NULL && *star != '\0')
       strcpy(s, star);
-    else 
+    else
       swe_get_planet_name(ipl, s);
     sprintf(serr, "%s is circumpolar, cannot calculate heliacal event", s);
     return -2;
@@ -2550,20 +2556,20 @@ static int32 get_asc_obl_diff_old(double tjd, int32 ipl, char *star, int32 iflag
 }
 #endif
 
-/* times of 
+/* times of
  * - superior and inferior conjunction (Mercury and Venus)
  * - conjunction and opposition (ipl >= Mars)
  */
 static const double tcon[] =
 {
-  0, 0, 
+  0, 0,
   2451550, 2451550,  /* Moon */
   2451604, 2451670,  /* Mercury */
   2451980, 2452280,  /* Venus */
   2451727, 2452074,  /* Mars */
-  2451673, 2451877,  /* Jupiter */ 
+  2451673, 2451877,  /* Jupiter */
   2451675, 2451868,  /* Saturn */
-  2451581, 2451768,  /* Uranus */ 
+  2451581, 2451768,  /* Uranus */
   2451568, 2451753,  /* Neptune */
 };
 
@@ -2716,7 +2722,7 @@ static int32 get_asc_obl_acronychal(double tjd_start, int32 ipl, char *star, int
   daystep = dsynperiod;
   tjd = tjd_start;
   if (TypeEvent == 4) {
-    sun_desc = FALSE; 
+    sun_desc = FALSE;
     obj_desc = TRUE;
   }
   /* ascensio (descensio) obliqua of sun */
@@ -2756,56 +2762,56 @@ static int32 get_heliacal_day(double tjd, double *dgeo, double *datm, double *do
   double direct_day = 0, direct_time = 0, tfac, tend, daystep, tday, vdelta, tret;
   double darr[30], vd, dmag, div;
   int32 ipl = DeterObject(ObjectName);
-  /* 
-   * find the day and minute on which the object becomes visible 
+  /*
+   * find the day and minute on which the object becomes visible
    */
   switch (TypeEvent) {
     /* morning first */
-    case 1: is_rise_or_set = SE_CALC_RISE; 
+    case 1: is_rise_or_set = SE_CALC_RISE;
       direct_day = 1; direct_time = -1;
       break;
     /* evening last */
-    case 2: is_rise_or_set = SE_CALC_SET; 
+    case 2: is_rise_or_set = SE_CALC_SET;
       direct_day = -1; direct_time = 1;
       break;
     /* evening first */
-    case 3: is_rise_or_set = SE_CALC_SET; 
+    case 3: is_rise_or_set = SE_CALC_SET;
       direct_day = 1; direct_time = 1;
       break;
     /* morning last */
-    case 4: is_rise_or_set = SE_CALC_RISE; 
+    case 4: is_rise_or_set = SE_CALC_RISE;
       direct_day = -1; direct_time = -1;
       break;
   }
   tfac = 1;
   switch (ipl) {
-    case SE_MOON: 
-      ndays = 16; 
+    case SE_MOON:
+      ndays = 16;
       daystep = 1;
       break;
-    case SE_MERCURY: 
-      ndays = 60; tjd -= 0 * direct_day; 
+    case SE_MERCURY:
+      ndays = 60; tjd -= 0 * direct_day;
       daystep = 5;
       tfac = 5;
       break;
-    case SE_VENUS: 
-      ndays = 300; tjd -= 30 * direct_day; 
+    case SE_VENUS:
+      ndays = 300; tjd -= 30 * direct_day;
       daystep = 5;
       if (TypeEvent >= 3) {
 	daystep = 15;
         tfac = 3;
       }
       break;
-    case SE_MARS: 
-      ndays = 400; 
+    case SE_MARS:
+      ndays = 400;
       daystep = 15;
       tfac = 5;
-      break; 
-    case SE_SATURN: 
-      ndays = 300; 
+      break;
+    case SE_SATURN:
+      ndays = 300;
       daystep = 20;
       tfac = 5;
-      break; 
+      break;
     case -1:
       ndays = 300;
       if (call_swe_fixstar_mag(ObjectName, &dmag, serr) == SE_ERR) {
@@ -2821,7 +2827,7 @@ static int32 get_heliacal_day(double tjd, double *dgeo, double *datm, double *do
       }
       break;
     default:
-      ndays = 300; 
+      ndays = 300;
       daystep = 15;
       tfac = 3;
       break;
@@ -2831,7 +2837,7 @@ static int32 get_heliacal_day(double tjd, double *dgeo, double *datm, double *do
   for (tday = tjd, i = 0;
        (direct_day > 0 && tday < tend) || (direct_day < 0 && tday > tend);
        tday += daystep * direct_day, i++) {
-    vdelta = -100; 
+    vdelta = -100;
     if (i > 0)
       tday -= 0.3 * direct_day;
     if ((retval = my_rise_trans(tday, SE_SUN, "", is_rise_or_set, helflag, dgeo, datm, &tret, serr)) == SE_ERR) {
@@ -2851,7 +2857,7 @@ static int32 get_heliacal_day(double tjd, double *dgeo, double *datm, double *do
       retval_old = retval;
       tday -= daystep * direct_day;
       daystep = 1;
-      /* Note: beyond latitude 55N (?), Mars can have a morning last. 
+      /* Note: beyond latitude 55N (?), Mars can have a morning last.
        * If the period of visibility is less than 5 days, we may miss the
        * event. I don't know if this happens */
       if (ipl >= SE_MARS || ipl == -1)
@@ -2878,7 +2884,7 @@ static int32 get_heliacal_day(double tjd, double *dgeo, double *datm, double *do
 	tret += 2.0 / div * direct_time * tfac;
       else if (vd < -0.1)
 	tret += 1.0 / div * direct_time * tfac;
-      else 
+      else
 	tret += 1.0 / div * direct_time;
       retval = swe_vis_limit_mag(tret, dgeo, datm, dobs, ObjectName, helflag, darr, serr);
       if (retval == SE_ERR)
@@ -2925,7 +2931,7 @@ static int32 time_optimum_visibility(double tjd, double *dgeo, double *datm, dou
   //vl = -1;
   t1 = tjd;
   t2 = tjd;
-  vl1 = -1; 
+  vl1 = -1;
   vl2 = -1;
   //printf("begin tret=%f, dvl=%f\n", tjd, darr[0] - darr[7]);
   phot_scot_opic_sv = retval & SE_SCOTOPIC_FLAG;
@@ -2933,10 +2939,10 @@ static int32 time_optimum_visibility(double tjd, double *dgeo, double *datm, dou
     // fprintf(stderr, "i= %d\n", i);
     t1 += d;
     t_has_changed = 0;
-    while((retval = swe_vis_limit_mag(t1 - d, dgeo, datm, dobs, ObjectName, helflag, darr, serr)) >= 0 
-	&& darr[0] > darr[7] 
-	&& darr[0] - darr[7] > vl1) { 
-      t1 -= d; vl1 = darr[0] - darr[7]; 
+    while((retval = swe_vis_limit_mag(t1 - d, dgeo, datm, dobs, ObjectName, helflag, darr, serr)) >= 0
+	&& darr[0] > darr[7]
+	&& darr[0] - darr[7] > vl1) {
+      t1 -= d; vl1 = darr[0] - darr[7];
       t_has_changed = 1;
       //fprintf(stderr, "vl1=%f %d vlm=%f, obm=%f, t=%f\n", vl, retval, darr[0], darr[7], tjd + d);
       retval_sv = retval;
@@ -2950,10 +2956,10 @@ static int32 time_optimum_visibility(double tjd, double *dgeo, double *datm, dou
   for (i = 0, d = 100.0 / 86400.0; i < 3; i++, d /= 10.0) {
     t2 -= d;
     t_has_changed = 0;
-    while((retval = swe_vis_limit_mag(t2 + d, dgeo, datm, dobs, ObjectName, helflag, darr, serr)) >= 0 
-        && darr[0] > darr[7] 
-	&& darr[0] - darr[7] > vl2) { 
-      t2 += d; vl2 = darr[0] - darr[7]; 
+    while((retval = swe_vis_limit_mag(t2 + d, dgeo, datm, dobs, ObjectName, helflag, darr, serr)) >= 0
+        && darr[0] > darr[7]
+	&& darr[0] - darr[7] > vl2) {
+      t2 += d; vl2 = darr[0] - darr[7];
       t_has_changed = 1;
       //fprintf(stderr, "vl2=%f %d vlm=%f, obm=%f, t=%f\n", vl, retval, darr[0], darr[7], tjd + d);
       retval_sv = retval;
@@ -2964,7 +2970,7 @@ static int32 time_optimum_visibility(double tjd, double *dgeo, double *datm, dou
       t2 += d; /* revert initial subtraction */
     if (retval == SE_ERR) return SE_ERR;
   }
-  if (vl2 > vl1) 
+  if (vl2 > vl1)
     tjd = t2;
   else
     tjd = t1;
@@ -3003,9 +3009,9 @@ static int32 time_limit_invisible(double tjd, double *dgeo, double *datm, double
   retval_sv = retval;
   phot_scot_opic_sv = retval & SE_SCOTOPIC_FLAG;
   for (i = 0, d = d0; i < ncnt; i++, d /= 10.0) {
-    while((retval = swe_vis_limit_mag(tjd + d * direct, dgeo, datm, dobs, ObjectName, helflag, darr, serr)) >= 0 
-        && darr[0] > darr[7]) { 
-      tjd += d * direct; 
+    while((retval = swe_vis_limit_mag(tjd + d * direct, dgeo, datm, dobs, ObjectName, helflag, darr, serr)) >= 0
+        && darr[0] > darr[7]) {
+      tjd += d * direct;
       retval_sv = retval;
       phot_scot_opic_sv = retval & SE_SCOTOPIC_FLAG;
   /*    printf("%d: %f\n", direct, darr[8]); */
@@ -3015,7 +3021,7 @@ static int32 time_limit_invisible(double tjd, double *dgeo, double *datm, double
   *tret = tjd;
   /* if object disappears at setting, retval is -2, but we want it OK, and
    * also suppress the warning "object is below local horizon" */
-  *serr = '\0'; 
+  *serr = '\0';
   if (retval >= 0) {
     /* search for limit came to an end because change scotopic/photopic: */
     phot_scot_opic = (retval & SE_SCOTOPIC_FLAG);
@@ -3040,13 +3046,13 @@ static int32 get_acronychal_day(double tjd, double *dgeo, double *datm, double *
   /*int32 epheflag = helflag & (SEFLG_JPLEPH|SEFLG_SWIEPH|SEFLG_MOSEPH);*/
   /* int32 iflag = epheflag | SEFLG_EQUATORIAL | SEFLG_TOPOCTR;*/
   if (TypeEvent == 3 || TypeEvent == 5) {
-    is_rise_or_set = SE_CALC_RISE; 
+    is_rise_or_set = SE_CALC_RISE;
     /* tret = tjdc - 3;
     if (ipl >= SE_MARS)
       tret = tjdc - 3;*/
     direct = -1;
   } else {
-    is_rise_or_set = SE_CALC_SET; 
+    is_rise_or_set = SE_CALC_SET;
     /*tret = tjdc + 3;
     if (ipl >= SE_MARS)
       tret = tjdc + 3;*/
@@ -3127,7 +3133,7 @@ static int32 get_heliacal_details(double tday, double *dgeo, double *datm, doubl
     retval = OK;
     limit_2_undefined = TRUE; /* change photopic <-> scotopic vision */
   }
-  /* correct sequence of times: 
+  /* correct sequence of times:
    * with event types 2 and 3 swap dret[0] and dret[2] */
   if (TypeEvent == 2 || TypeEvent == 3) {
     tday = dret[2];
@@ -3166,16 +3172,16 @@ static int32 heliacal_ut_vis_lim(double tjd_start, double *dgeo, double *datm, d
   ipl = DeterObject(ObjectName);
   epheflag = helflag & (SEFLG_JPLEPH|SEFLG_SWIEPH|SEFLG_MOSEPH);
   iflag = SEFLG_TOPOCTR | SEFLG_EQUATORIAL | epheflag;
-  if (!(helflag & SE_HELFLAG_HIGH_PRECISION)) 
+  if (!(helflag & SE_HELFLAG_HIGH_PRECISION))
     iflag |= SEFLG_NONUT | SEFLG_TRUEPOS;
   if (ipl == SE_MERCURY)
     tjd = tjd_start - 30;
   else
-    tjd = tjd_start - 50; /* -50 makes sure, that no event is missed, 
+    tjd = tjd_start - 50; /* -50 makes sure, that no event is missed,
                          * but may return an event before start date */
   helflag2 = helflag;
   /*helflag2 &= ~SE_HELFLAG_HIGH_PRECISION;*/
-  /* 
+  /*
    * heliacal event
    */
   if (ipl == SE_MERCURY || ipl == SE_VENUS || TypeEvent <= 2) {
@@ -3191,10 +3197,10 @@ static int32 heliacal_ut_vis_lim(double tjd_start, double *dgeo, double *datm, d
       }
     }
     /* find the day and minute on which the object becomes visible */
-    retval = get_heliacal_day(tjd, dgeo, datm, dobs, ObjectName, helflag2, TypeEvent, &tday, serr); 
+    retval = get_heliacal_day(tjd, dgeo, datm, dobs, ObjectName, helflag2, TypeEvent, &tday, serr);
     if (retval != OK)
       goto swe_heliacal_err;
-  /* 
+  /*
    * acronychal event
    */
   } else {
@@ -3215,7 +3221,7 @@ static int32 heliacal_ut_vis_lim(double tjd_start, double *dgeo, double *datm, d
   }
   dret[0] = tday;
   if (!(helflag & SE_HELFLAG_NO_DETAILS)) {
-    /* more precise event times for 
+    /* more precise event times for
      * - morning first, evening last
      * - venus and mercury's evening first and morning last
      */
@@ -3225,8 +3231,8 @@ static int32 heliacal_ut_vis_lim(double tjd_start, double *dgeo, double *datm, d
     } else if (0) {
       if (TypeEvent == 4 || TypeEvent == 6) direct = -1;
       for (i = 0, d = 100.0 / 86400.0; i < 3; i++, d /= 10.0) {
-	while((retval = swe_vis_limit_mag(*dret + d * direct, dgeo, datm, dobs, ObjectName, helflag, darr, serr)) == -2 || (retval >= 0 && darr[0] < darr[7])) { 
-	  *dret += d * direct; 
+	while((retval = swe_vis_limit_mag(*dret + d * direct, dgeo, datm, dobs, ObjectName, helflag, darr, serr)) == -2 || (retval >= 0 && darr[0] < darr[7])) {
+	  *dret += d * direct;
 	}
       }
       /* the last time step must be added */
@@ -3262,12 +3268,12 @@ static int32 moon_event_vis_lim(double tjdstart, double *dgeo, double *datm, dou
   helflag2 = helflag;
   helflag2 &= ~SE_HELFLAG_HIGH_PRECISION;
   /* check Synodic/phase Period */
-  tjd = tjdstart - 30; /* -50 makes sure, that no event is missed, 
+  tjd = tjdstart - 30; /* -50 makes sure, that no event is missed,
                          * but may return an event before start date */
   if ((retval = find_conjunct_sun(tjd, ipl, helflag, TypeEvent, &tjd, serr)) == SE_ERR)
     return SE_ERR;
   /* find the day and minute on which the object becomes visible */
-  retval = get_heliacal_day(tjd, dgeo, datm, dobs, ObjectName, helflag2, TypeEvent, &tjd, serr); 
+  retval = get_heliacal_day(tjd, dgeo, datm, dobs, ObjectName, helflag2, TypeEvent, &tjd, serr);
   if (retval != OK)
     goto moon_event_err;
   dret[0] = tjd;
@@ -3276,7 +3282,7 @@ static int32 moon_event_vis_lim(double tjdstart, double *dgeo, double *datm, dou
   if (retval == SE_ERR) goto moon_event_err;
   dret[1] = tjd;
   /* find moment of becoming visible */
-  /* Note: On the day of first light the moon may become visible 
+  /* Note: On the day of first light the moon may become visible
    * already during day. It also may appear during day, disappear again
    * and then reappear after sunset */
   direct = 1;
@@ -3326,7 +3332,7 @@ moon_event_err:
 static int32 MoonEventJDut(double JDNDaysUTStart, double *dgeo, double *datm, double *dobs, int32 TypeEvent, int32 helflag, double *dret, char *serr)
 {
   int32 avkind = helflag & SE_HELFLAG_AVKIND;
-  if (avkind) 
+  if (avkind)
     return moon_event_arc_vis(JDNDaysUTStart, dgeo, datm, dobs, TypeEvent, helflag, dret, serr);
   else
     return moon_event_vis_lim(JDNDaysUTStart, dgeo, datm, dobs, TypeEvent, helflag, dret, serr);
@@ -3335,7 +3341,7 @@ static int32 MoonEventJDut(double JDNDaysUTStart, double *dgeo, double *datm, do
 static int32 heliacal_ut(double JDNDaysUTStart, double *dgeo, double *datm, double *dobs, char *ObjectName, int32 TypeEventIn, int32 helflag, double *dret, char *serr_ret)
 {
   int32 avkind = helflag & SE_HELFLAG_AVKIND;
-  if (avkind) 
+  if (avkind)
     return heliacal_ut_arc_vis(JDNDaysUTStart, dgeo, datm, dobs, ObjectName, TypeEventIn, helflag, dret, serr_ret);
   else
     return heliacal_ut_vis_lim(JDNDaysUTStart, dgeo, datm, dobs, ObjectName, TypeEventIn, helflag, dret, serr_ret);
@@ -3352,15 +3358,25 @@ static int32 heliacal_ut(double JDNDaysUTStart, double *dgeo, double *datm, doub
 '                   default values and the height above sea level.
 ' - RH              relative humidity in %
 ' - VR              VR>=1: the Meteorological range: default 40 km
-'                   1>VR>0: the ktot (so the total atmospheric coefficient): 
+'                   1>VR>0: the ktot (so the total atmospheric coefficient):
 '                   a good default would be 0.25
-'                   VR=-1: the ktot is calculated from the other atmospheric 
+'                   VR=-1: the ktot is calculated from the other atmospheric
 '                   constants.
-' age [Year]        default 36, experienced sky observer in ancient times
+'
+' dobs[6]           observer parameters
+' - age [Year]      default 36, experienced sky observer in ancient times
 '                   optimum age is 23
-' SN                Snellen factor of the visual aquity of the observer
+' - SN              Snellen factor of the visual aquity of the observer
 '                   default 1
 '                   see: http://www.i-see.org/eyecharts.html#make-your-own
+' The following parameters of dobs[] are only relevant if the flag
+' SE_HELFLAG_OPTICAL_PARAMS is set:
+' - is_binocular    0 = monocular, 1 = binocular (actually a boolean)
+' - OpticMagn       telescope magnification:
+'                   0 = default to naked eye (binocular), 1 = naked eye
+' - OpticDia        optical aperture (telescope diameter) in mm
+' - OpticTrans      optical transmission
+'
 ' TypeEvent         1 morning first
 '                   2 evening last
 '                   3 evening first
@@ -3388,10 +3404,9 @@ int32 CALL_CONV swe_heliacal_ut(double JDNDaysUTStart, double *dgeo, double *dat
     MaxCountSynodicPeriod = MAX_COUNT_SYNPER_MAX;
 /*  if (helflag & SE_HELFLAG_SEARCH_1_PERIOD)
       MaxCountSynodicPeriod = 1; */
-  *serr = '\0';
   if (serr_ret != NULL)
     *serr_ret = '\0';
-  /* note, the fixed stars functions rewrite the star name. The input string 
+  /* note, the fixed stars functions rewrite the star name. The input string
      may be too short, so we have to make sure we have enough space */
   strcpy_VBsafe(ObjectName, ObjectNameIn);
   tolower_string_star(ObjectName);
@@ -3404,7 +3419,7 @@ int32 CALL_CONV swe_heliacal_ut(double JDNDaysUTStart, double *dgeo, double *dat
     }
     return SE_ERR;
   }
-  /* 
+  /*
    * Moon events
    */
   if (Planet == SE_MOON) {
@@ -3425,8 +3440,8 @@ int32 CALL_CONV swe_heliacal_ut(double JDNDaysUTStart, double *dgeo, double *dat
       strcpy(serr_ret, serr);
     return retval;
   }
-  /* 
-   * planets and fixed stars 
+  /*
+   * planets and fixed stars
    */
   if (!(helflag & SE_HELFLAG_AVKIND)) {
     if (Planet == -1 || Planet >= SE_MARS) {
@@ -3469,13 +3484,13 @@ int32 CALL_CONV swe_heliacal_ut(double JDNDaysUTStart, double *dgeo, double *dat
   tadd = dsynperiod * 0.6;
   if (Planet == SE_MERCURY)
     tadd = 30;
-  /* 
-   * this is the outer loop over n synodic periods 
+  /*
+   * this is the outer loop over n synodic periods
    */
   tjd = tjd0;
   retval = -2;  /* indicates that another synodic period has to be done */
-  for (itry = 0; 
-       tjd < tjdmax && retval == -2; 
+  for (itry = 0;
+       tjd < tjdmax && retval == -2;
        itry++, tjd += tadd) {
     *serr = '\0';
     retval = heliacal_ut(tjd, dgeo, datm, dobs, ObjectName, TypeEvent, helflag, dret, serr);
@@ -3488,9 +3503,9 @@ int32 CALL_CONV swe_heliacal_ut(double JDNDaysUTStart, double *dgeo, double *dat
       retval = heliacal_ut(tjd, dgeo, datm, dobs, ObjectName, TypeEvent, helflag, dret, serr);
     }
   }
-  /* 
+  /*
    * no event was found within MaxCountSynodicPeriod, return error
-   */ 
+   */
   if ((helflag & SE_HELFLAG_SEARCH_1_PERIOD) && (retval == -2 || dret[0] > tjd0 + dsynperiod * 1.5)) {
     strcpy(serr, "no heliacal date found within this synodic period");
     retval = -2;
