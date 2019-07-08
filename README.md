@@ -9,14 +9,14 @@ status](https://ci.appveyor.com/api/projects/status/github/rstub/swephR?branch=m
 status](https://codecov.io/gh/rstub/swephR/branch/master/graph/badge.svg)](https://codecov.io/github/rstub/swephR?branch=master)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/swephR)](https://cran.r-project.org/package=swephR)
-[![Downloads](http://cranlogs.r-pkg.org/badges/swephR?color=brightgreen)](http://www.r-pkg.org/pkg/swephR)
+[![Downloads](https://cranlogs.r-pkg.org/badges/swephR?color=brightgreen)](https://www.r-pkg.org/pkg/swephR)
 [![Dependencies](https://tinyverse.netlify.com/badge/swephR)](https://cran.r-project.org/package=swephR)
 
 # swephR
 
 The goal of swephR is to provide an R interface to the [Swiss
 Ephemeris](https://www.astro.com/swisseph/). The Swiss Ephemeris is a
-high precision ephemeris based upon the DE431 ephemerides from NASA’s
+high precision ephemeris based upon the DE431 ephemeris from NASA’s
 JPL. It covers the time range 13201 BC to AD 17191.
 
 ## Installation

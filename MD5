@@ -1,14 +1,14 @@
-07fcc3527b7cd6f6ced629e3a7cbc994 *DESCRIPTION
+6746af48495ac3276ec73b96741daba9 *DESCRIPTION
 7503307cde08f947f0ea88bc6e9f4942 *LICENSE
 a14641447770c091622680dfa34c134e *NAMESPACE
-d3cc29abcb1fe84f5cd6f6a898b59878 *NEWS.md
+ce24a1f0ab74640f52a7c8b5257d2a9b *NEWS.md
 0c1e51b0f1d7b9e523b433551e6ea1d5 *R/RcppExports.R
 4103e21d7a62fe5bb97e0bf5c3ed66ff *R/SEdata.R
 47987cf8bac44b15a190f8967d2d5744 *R/Section2.R
 4a156c31d40765741799a81cecc42a3a *R/Section4.R
 46b71359c14d16fbd62a523096e7f27a *R/swephR-package.R
 a3b8264b33f4297cff7489d062a6360b *R/zzz.R
-0e6f7d5125c92ad0d3be47f331892be8 *README.md
+52337f90cf9a522a3694641ac9c2e37c *README.md
 979e70d11bfb1b1c8fbeb130b0044d34 *build/vignette.rds
 ca83365ec239983460052b859fd5d55c *cleanup
 6c643ac297eb05506bc93232ee1c1126 *data/SE.rda
@@ -40,7 +40,7 @@ c0d2a1d7ada077a73b0599e43ddf1529 *src/libswe/swedate.c
 e78b8f5d383e3b6a215db4877ef7b801 *src/libswe/swedate.h
 2123f278e88a351f8be2a2dbbea3db19 *src/libswe/swedll.h
 0a15769837af2d23fa7b1fb7909bff5c *src/libswe/swehel.c
-01987b20fa901ff35a710fa36067f202 *src/libswe/swehouse.c
+dc6f371b344778ecc434c4ed713fb744 *src/libswe/swehouse.c
 788d681530e18bad383831d66a5b2021 *src/libswe/swehouse.h
 76ee10464520c3b9d1cd9cc9df705fd6 *src/libswe/swejpl.c
 c26fafd8b39eb4ee90b063f711a6ffb8 *src/libswe/swejpl.h

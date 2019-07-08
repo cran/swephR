@@ -1,7 +1,7 @@
 Package: swephR
 Type: Package
 Title: High Precision Swiss Ephemeris
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(
     person("Ralf", "Stubner", email = "ralf.stubner@gmail.com", role = c("aut", "cre")),
     person("Victor", "Reijs", role = "aut"),
@@ -20,17 +20,18 @@ LinkingTo: Rcpp
 RoxygenNote: 6.1.1
 Suggests: testthat, swephRdata, knitr, rmarkdown
 Encoding: UTF-8
-URL: https://github.com/rstub/swephR/, http://www.astro.com/swisseph/
+URL: https://github.com/rstub/swephR/, https://rstub.github.io/swephR/,
+        http://www.astro.com/swisseph/
 BugReports: https://github.com/rstub/swephR/issues/
 Additional_repositories: https://rstub.github.io/drat
 VignetteBuilder: knitr
 LazyData: true
 NeedsCompilation: yes
-Packaged: 2019-07-04 21:54:31 UTC; ralf
+Packaged: 2019-07-08 08:38:25 UTC; ralf
 Author: Ralf Stubner [aut, cre],
   Victor Reijs [aut],
   Authors and copyright holder of the Swiss Ephemeris [aut, cph] (see
     LICENSE for details)
 Maintainer: Ralf Stubner <ralf.stubner@gmail.com>
 Repository: CRAN
-Date/Publication: 2019-07-05 07:30:04 UTC
+Date/Publication: 2019-07-08 10:30:02 UTC
