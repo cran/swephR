@@ -3,6 +3,12 @@
 \name{Section6}
 \alias{Section6}
 \alias{swe_sol_eclipse_when_loc}
+\alias{swe_sol_eclipse_when_glob}
+\alias{swe_sol_eclipse_how}
+\alias{swe_sol_eclipse_where}
+\alias{swe_lun_occult_when_loc}
+\alias{swe_lun_occult_when_glob}
+\alias{swe_lun_occult_where}
 \alias{swe_lun_eclipse_when_loc}
 \alias{swe_lun_eclipse_how}
 \alias{swe_lun_eclipse_when}
@@ -11,6 +17,7 @@
 \alias{swe_pheno}
 \alias{swe_azalt}
 \alias{swe_azalt_rev}
+\alias{swe_refrac}
 \alias{swe_refrac_extended}
 \alias{swe_heliacal_ut}
 \alias{swe_vis_limit_mag}
@@ -20,6 +27,20 @@
 \title{Section 6: Eclipses, Risings, Settings, Meridian Transits, Planetary Phenomena}
 \usage{
 swe_sol_eclipse_when_loc(jd_start, ephe_flag, geopos, backward)
+
+swe_sol_eclipse_when_glob(jd_start, ephe_flag, ifltype, backward)
+
+swe_sol_eclipse_how(jd_ut, ephe_flag, geopos)
+
+swe_sol_eclipse_where(jd_ut, ephe_flag)
+
+swe_lun_occult_when_loc(jd_start, ipl, starname, ephe_flag, geopos,
+  backward)
+
+swe_lun_occult_when_glob(jd_start, ipl, starname, ephe_flag, ifltype,
+  backward)
+
+swe_lun_occult_where(jd_ut, ipl, starname, ephe_flag)
 
 swe_lun_eclipse_when_loc(jd_start, ephe_flag, geopos, backward)
 
@@ -37,6 +58,8 @@ swe_pheno(jd_et, ipl, ephe_flag)
 swe_azalt(jd_ut, coord_flag, geopos, atpress, attemp, xin)
 
 swe_azalt_rev(jd_ut, coord_flag, geopos, xin)
+
+swe_refrac(InAlt, atpress, attemp, calc_flag)
 
 swe_refrac_extended(InAlt, height, atpress, attemp, lapse_rate, calc_flag)
 
@@ -63,10 +86,10 @@ swe_heliacal_angle(jd_ut, dgeo, datm, dobs, helflag, mag, AziO, AziS, AziM,
 
 \item{backward}{backwards search as boolean (TRUE)}
 
-\item{jd_ut}{UT Julian day number as double (day)}
-
 \item{ifltype}{eclipse type as integer (\code{SE$ECL_CENTRAL=1}, \code{SE$ECL_NONCENTRAL=2},
-\code{SE$ECL_TOTAL=4}, \code{SE$ECL_ANNULAR=8}, \code{SE$ECL_PARTIAL=16} or \code{SE$ECL_ANNULAR_TOTAL=32})}
+\code{SE$ECL_TOTAL=4}, \code{SE$ECL_ANNULAR=8}, \code{SE$ECL_PARTIAL=16}, \code{SE$ECL_ANNULAR_TOTAL=32} or 0 for any)}
+
+\item{jd_ut}{UT Julian day number as double (day)}
 
 \item{ipl}{Body/planet as integer (\code{SE$SUN=0}, \code{SE$MOON=1}, ... \code{SE$PLUTO=9})}
 
@@ -88,11 +111,11 @@ swe_heliacal_angle(jd_ut, dgeo, datm, dobs, helflag, mag, AziO, AziS, AziM,
 
 \item{InAlt}{object's apparent/topocentric altitude as double (depending on calc_flag) (deg)}
 
+\item{calc_flag}{Calculation flag as integer (refraction direction (\code{SE$TRUE_TO_APP=0} or \code{SE$APP_TO_TRUE=1}))}
+
 \item{height}{observer's height as double (m)}
 
 \item{lapse_rate}{lapse rate as double (K/m)}
-
-\item{calc_flag}{Calculation flag as integer (refraction direction (\code{SE$TRUE_TO_APP=0} or \code{SE$APP_TO_TRUE=1}))}
 
 \item{jd_utstart}{UT Julian day number as double (day)}
 
@@ -125,6 +148,30 @@ swe_heliacal_angle(jd_ut, dgeo, datm, dobs, helflag, mag, AziO, AziS, AziM,
      \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector,
      \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
 
+\code{swe_sol_eclipse_when_glob} returns a list with named entries:
+     \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector
+     and \code{serr} error warning as string
+
+\code{swe_sol_eclipse_how} returns a list with named entries:
+     \code{return} status flag as integer,
+     \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
+
+\code{swe_sol_eclipse_where} returns a list with named entries:
+     \code{return} status flag as integer, \code{pathpos} geographic path positions as numeric vector,
+     \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
+
+\code{swe_lun_occult_when_loc} returns a list with named entries:
+     \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector,
+     \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
+
+\code{swe_lun_occult_when_glob} returns a list with named entries:
+     \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector,
+     \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
+
+\code{swe_lun_occult_where} returns a list with named entries:
+     \code{return} status flag as integer, \code{pathpos} geographic path positions as numeric vector,
+     \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
+
 \code{swe_lun_eclipse_when_loc} returns a list with named entries:
      \code{return} status flag as integer, \code{tret} for eclipse timing moments,
      \code{attr} phenomena during eclipse and \code{serr} error warning as string
@@ -153,6 +200,8 @@ swe_heliacal_angle(jd_ut, dgeo, datm, dobs, helflag, mag, AziO, AziS, AziM,
 
 \code{swe_azalt_rev} returns a list with named entries:
      \code{xaz} for celestial info as numeric vector.
+
+\code{swe_refrac} returns the (apparent/topocentric) altitude as double (deg)
 
 \code{swe_refrac_extended} returns a list with named entries: \code{return} status flag as integer,
      \code{dret} refraction results as numeric vector (TopoAlt, AppAlt, refraction)
@@ -184,6 +233,30 @@ heliacal phenomenon after a given start date
   }
 
 \describe{
+\item{swe_sol_eclipse_when_glob()}{Find the next solar eclipse on earth.}
+}
+
+\describe{
+\item{swe_sol_eclipse_how()}{Compute the attributes of a solar eclipse for a given time.}
+}
+
+\describe{
+\item{swe_sol_eclipse_where()}{Compute the geographic position of a solar eclipse path.}
+}
+
+\describe{
+\item{swe_lun_occult_when_loc()}{Find the next lunar occultation with planet or star at a certain position.}
+}
+
+\describe{
+\item{swe_lun_occult_when_glob()}{Find the next lunar occultation with planet or star somewhere on the earth.}
+}
+
+\describe{
+\item{swe_lun_occult_where()}{Compute the geographic position of an occultation path.}
+}
+
+\describe{
 \item{swe_lun_eclipse_when_loc()}{Find the next lunar eclipse for a given geographic position.}
 }
 
@@ -212,9 +285,14 @@ heliacal phenomenon after a given start date
 }
 
 \describe{
-\item{swe_azalt_rev()}{compute either ecliptical or equatorial coordinates from azimuth and true altitude.
+\item{swe_azalt_rev()}{Compute either ecliptical or equatorial coordinates from azimuth and true altitude.
 If only an apparent altitude is given, the true altitude has to be computed first with
 e.g. the function swe_refrac_extended().}
+}
+
+\describe{
+\item{swe_refrac()}{Calculate either the topocentric altitude from the apparent altitude
+or the apparent altitude from the topocentric altitude.}
 }
 
 \describe{
@@ -253,9 +331,15 @@ use the function swe_heliacal_ut().}
 \examples{
 data(SE)
 swe_sol_eclipse_when_loc(1234567,SE$FLG_MOSEPH,c(0,50,10),FALSE)
+swe_sol_eclipse_when_glob(1234567,SE$FLG_MOSEPH,SE$ECL_TOTAL+SE$ECL_CENTRAL+SE$ECL_NONCENTRAL,FALSE)
+swe_sol_eclipse_how(1234580.19960447,SE$FLG_MOSEPH,c(0,50,10))
+swe_sol_eclipse_where(1234771.68584597,SE$FLG_MOSEPH)
+swe_lun_occult_when_loc(1234567,SE$VENUS,"",SE$FLG_MOSEPH+SE$ECL_ONE_TRY,c(0,50,10),FALSE)
+swe_lun_occult_when_glob(1234567,SE$VENUS,"",SE$FLG_MOSEPH+SE$ECL_ONE_TRY,SE$ECL_TOTAL,FALSE)
+swe_lun_occult_where(1234590.44756319,SE$VENUS,"",SE$FLG_MOSEPH+SE$ECL_ONE_TRY)
 swe_lun_eclipse_when_loc(1234567,SE$FLG_MOSEPH,c(0,50,10),FALSE)
-swe_lun_eclipse_how(1234580.19960447,SE$FLG_MOSEPH,c(0,50,10))
 swe_lun_eclipse_when(1234567,SE$FLG_MOSEPH,SE$ECL_CENTRAL,FALSE)
+swe_lun_eclipse_how(1234580.19960447,SE$FLG_MOSEPH,c(0,50,10))
 swe_rise_trans_true_hor(1234567.5,SE$SUN,"",SE$FLG_MOSEPH,0,c(0,50,10),1013.25,15,0)
 swe_pheno_ut(1234567,1,SE$FLG_MOSEPH)
 swe_pheno(1234567,1,SE$FLG_MOSEPH)
@@ -274,5 +358,5 @@ swe_heliacal_angle(1234567.5,c(0,50,10),c(1013.25,15,20,0.25),c(25,1,1,1,5,0.8),
   SE$HELFLAG_HIGH_PRECISION+SE$HELFLAG_OPTICAL_PARAMS,-1,124,120,0,-45)
 }
 \seealso{
-Section 6 in \url{http://www.astro.com/swisseph/swephprg.htm}
+Section 6 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
 }

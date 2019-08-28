@@ -22,7 +22,7 @@ swe_set_delta_t_userdef(delta_t)
 \arguments{
 \item{jd_ut}{Julian day number (UT) as numeric vector (day)}
 
-\item{ephe_flag}{ephemeris flag as integer (SE$FLG_JPLEPH=1, SE$FLG_SWIEPH=2 or SE$FLG_MOSEPH=4) (section 2.3.2)}
+\item{ephe_flag}{ephemeris flag as integer (SE$FLG_JPLEPH=1, SE$FLG_SWIEPH=2 or SE$FLG_MOSEPH=4)}
 
 \item{t_acc}{Tidal acceleration as double (arcsec/century^2)}
 
@@ -77,5 +77,5 @@ swe_get_tid_acc()
 swe_set_delta_t_userdef(0.23)
 }
 \seealso{
-Section 8 in \url{http://www.astro.com/swisseph/swephprg.htm}
+Section 8 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
 }

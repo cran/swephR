@@ -1,7 +1,7 @@
 context("Misc tests")
 
 test_that("day_of_week works", {
-  expect_equal(swe_day_of_week(1234.567), 3)
+  expect_equal(swe_day_of_week(1234.567), 3 )
 })
 
 test_that("day_of_week works with vector input", {
@@ -138,3 +138,106 @@ expect_equal(result$return, 0)
 expect_equal(result$dgsect, 31.41367,tolerance = .000001)
 expect_equal(result$serr, "")
 })
+
+test_that("Compute planetary nodes and apsides (based on UT):", {
+  data(SE)
+  result <- swe_nod_aps_ut(2451545,SE$MOON, SE$FLG_MOSEPH,SE$NODBIT_MEAN)
+  expect_equal(result$return, 0)
+  expect_equal(result$xnasc, c(1.250406e+02, 3.476104e-13, 2.460922e-03, 0,0,0),tolerance = .000001)
+  expect_equal(result$xndsc, c(3.050406e+02, 2.439083e-13, 2.671325e-03, 0,0,0),tolerance = .000001)
+  expect_equal(result$xperi, c(83.464332724, -3.419715015,  0.002428485, 0,0,0),tolerance = .000001)
+  expect_equal(result$xaphe, c(2.634643e+02, 3.419715e+00, 2.710625e-03, 0,0,0),tolerance = .000001)
+  expect_equal(result$serr, "")
+})
+
+test_that("Compute planetary nodes and apsides (based on ET):", {
+  data(SE)
+  result <- swe_nod_aps(2451545,SE$MOON, SE$FLG_MOSEPH,SE$NODBIT_MEAN)
+  expect_equal(result$return, 0)
+  expect_equal(result$xnasc, c(1.250407e+02, 1.105681e-13, 2.460922e-03, 0,0,0),tolerance = .000001)
+  expect_equal(result$xndsc, c(3.050407e+02, -2.612689e-13,  2.671325e-03, 0,0,0),tolerance = .000001)
+  expect_equal(result$xperi, c(83.464250479, -3.419723161 , 0.002428485, 0,0,0),tolerance = .000001)
+  expect_equal(result$xaphe, c(2.634643e+02, 3.419723e+00, 2.710625e-03, 0,0,0),tolerance = .000001)
+  expect_equal(result$serr, "")
+})
+
+test_that("calculates osculating elements (Kepler elements) and orbital periods:", {
+  data(SE)
+  result <- swe_get_orbital_elements(2451545,SE$MOON, SE$FLG_MOSEPH)
+  expect_equal(result$return, 0)
+  expect_equal(result$dret[0:17], c(2.552584e-03,  6.317394e-02,  5.240360e+00,  1.239572e+02 , 3.089075e+02 , 7.286466e+01 , 1.466895e+02 , 1.504159e+02 , 1.485766e+02,
+                              2.195542e+02,  7.435498e-02 , 1.325595e+01,  7.435776e-02 ,-2.933903e+01,  2.451534e+06 , 2.391328e-03 , 2.713841e-03),tolerance = .000001)
+  expect_equal(result$serr, "")
+})
+
+test_that("Calculates the maximum possible distance, the minimum possible distance and the current true distance:", {
+  data(SE)
+  result <- swe_orbit_max_min_true_distance(2451545,SE$MOON, SE$FLG_MOSEPH)
+  expect_equal(result$return, 0)
+  expect_equal(result$dmax, 0.002713841,tolerance = .000001)
+  expect_equal(result$dmin, 0.002391328,tolerance = .000001)
+  expect_equal(result$dtrue, 0.002690191,tolerance = .000001)
+  expect_equal(result$serr, "")
+})
+
+test_that("Calcuate the time zone time:", {
+  result <- swe_utc_time_zone(2000,1,1,12,5,1.2,2)
+  expect_equal(result$year_out, 2000)
+  expect_equal(result$month_out, 1)
+  expect_equal(result$day_out, 1)
+  expect_equal(result$hour_out, 10)
+  expect_equal(result$min_out, 5)
+  expect_equal(result$sec_out, 1.2,tolerance = .000001)
+})
+
+test_that("Calcuate Julian day number ET and UT):", {
+  result <- swe_utc_to_jd(2000,1,1,0,12,3.4,SE$GREG_CAL)
+  expect_equal(result$return,0)
+  expect_equal(result$dret, c(2451544.50911556, 2451544.50837680),tolerance = .000001)
+  expect_equal(result$serr, "")
+})
+
+test_that("Calcuate UTC from Julian day number ET):", {
+  result <- swe_jdet_to_utc(2452500,SE$GREG_CAL)
+  expect_equal(result$year_out, 2002)
+  expect_equal(result$month_out, 8)
+  expect_equal(result$day_out, 13)
+  expect_equal(result$hour_out, 11)
+  expect_equal(result$min_out, 58)
+  expect_equal(result$sec_out, 55.8159989118576,tolerance = .000001)
+})
+
+test_that("Calcuate UTC from Julian day number UT):", {
+  result <- swe_jdut1_to_utc(2452500,SE$GREG_CAL)
+  expect_equal(result$year_out, 2002)
+  expect_equal(result$month_out, 8)
+  expect_equal(result$day_out, 13)
+  expect_equal(result$hour_out, 12)
+  expect_equal(result$min_out, 0)
+  expect_equal(result$sec_out, 0.23009330034256,tolerance = .000001)
+})
+
+test_that("Calculate equation of time):", {
+  skip_if_not_installed("swephRdata")
+  result <- swe_time_equ(2452500)
+  expect_equal(result$return,0)
+  expect_equal(result$e, -0.00338739864203035,tolerance = .000001)
+  expect_equal(result$serr, "")
+})
+
+test_that("Calculate LAT):", {
+  skip_if_not_installed("swephRdata")
+  result <- swe_lmt_to_lat(2452500,0)
+  expect_equal(result$return,0)
+  expect_equal(result$jd_lat, 2452499.9966126,tolerance = .000001)
+  expect_equal(result$serr, "")
+})
+
+test_that("Calculate LMT):", {
+  skip_if_not_installed("swephRdata")
+  result <- swe_lat_to_lmt(2452500,0)
+  expect_equal(result$return,0)
+  expect_equal(result$jd_lmt, 2452500.00338698,tolerance = .000001)
+  expect_equal(result$serr, "")
+})
+

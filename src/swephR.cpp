@@ -23,7 +23,7 @@
 //' @title Section 1: The Ephemeris file related functions
 //' @name Section1
 //' @description Several initialization functions
-//' @seealso Section 1 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @seealso Section 1 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
 //' @details
 //' \describe{
 //'   \item{swe_set_ephe_path()}{This is the first function that should be called
@@ -36,6 +36,7 @@
 //'        resources (open files and allocated memory) used by Swiss Ephemeris.}
 //'   \item{swe_set_jpl_file()}{Set name of JPL ephemeris file.}
 //'   \item{swe_version()}{The function provides the version number of the Swiss Ephemeris software.}
+//'   \item{swe_get_library_path()}{The function provides the path where the executable resides.}
 //' }
 //' @param path Directory for the sefstars.txt, swe_deltat.txt and jpl files
 //' @examples
@@ -43,6 +44,7 @@
 //' swe_close()
 //' swe_set_jpl_file("de431.eph")
 //' swe_version()
+//' swe_get_library_path()
 //' @rdname Section1
 //' @export
 // [[Rcpp::export(swe_set_ephe_path)]]
@@ -80,6 +82,15 @@ std::string version() {
   return std::string(&version[0]);
 }
 
+//' @return \code{swe_get_library_path} returns the path in which the executable resides as string
+//' @rdname Section1
+//' @export
+// [[Rcpp::export(swe_get_library_path)]]
+std::string get_library_path() {
+  std::array<char, 256> spath{{'\0'}};
+  swe_get_library_path(&spath[0]);
+  return std::string(&spath[0]);
+}
 
 //////////////////////////////////////////////////////////////////////////
 // Section 2: Computing positions
@@ -145,7 +156,7 @@ Rcpp::List calc(Rcpp::NumericVector jd_et, Rcpp::IntegerVector ipl, int iflag) {
 //' @title Section 3: Find a planetary or asteroid name
 //' @name Section3
 //' @description Find a planetary or asteroid name.
-//' @seealso Section 3 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @seealso Section 3 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
 //' @details
 //' \describe{
 //'   \item{swe_get_planet_name()}{Convert object number into object name.}
@@ -263,22 +274,138 @@ Rcpp::List fixstar2_mag(Rcpp::CharacterVector starname) {
 }
 
 //////////////////////////////////////////////////////////////////////////
+//' @title Section 5: Kepler elements, nodes, apsides and orbital periods
+//' @name Section5
+//' @description Functions for: determining Kepler elements, nodes, apsides and orbital periods
+//' @seealso Section 5 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
+//' @param jd_et  ET Julian day number as double (day)
+//' @param jd_ut  UT Julian day number as double (day)
+//' @param ipl  Body/planet as integer (\code{SE$SUN=0}, \code{SE$MOON=1}, ... \code{SE$PLUTO=9})
+//' @param iflag Computation flag as integer, many options possible (section 2.3)
+//' @param method Method as integer (\code{SE$NODBIT_MEAN=0}, \code{SE$NODBIT_OSCUN=1},, \code{SE$NODBIT_OSCU_BAR=4}, \code{SE$NODBIT_FOPOINT=256})
+//' @details
+//' \describe{
+//'   \item{swe_nod_aps_ut()}{Compute planetary nodes and apsides (perihelia, aphelia, second focal points of the orbital ellipses).}
+//'   }
+//' @examples
+//' data(SE)
+//' swe_nod_aps_ut(2451545,SE$MOON, SE$FLG_MOSEPH,SE$NODBIT_MEAN)
+//' swe_nod_aps(2451545,SE$MOON, SE$FLG_MOSEPH,SE$NODBIT_MEAN)
+//' swe_get_orbital_elements(2451545,SE$MOON, SE$FLG_MOSEPH)
+//' swe_orbit_max_min_true_distance(2451545,SE$MOON, SE$FLG_MOSEPH)
+//' @return \code{swe_nod_aps_ut} returns a list with named entries:
+//'      \code{return} status flag as integer, \code{xnasc} ascending nodes as numeric vector,
+//'      \code{xndsc} descending nodes as numeric vector, \code{xperi} perihelion as numeric vector, \code{xaphe} aphelion as numeric vector and \code{serr} error message as string
+//' @rdname Section5
+//' @export
+// [[Rcpp::export(swe_nod_aps_ut)]]
+Rcpp::List nod_aps_ut(double jd_ut, int ipl, int iflag, int method) {
+  std::array<double, 6> xnasc{0.0};
+  std::array<double, 6> xndsc{0.0};
+  std::array<double, 6> xperi{0.0};
+  std::array<double, 6> xaphe{0.0};
+  std::array<char, 256> serr{'\0'};
+  int rtn = swe_nod_aps_ut(jd_ut, ipl, iflag,method,  xnasc.begin(), xndsc.begin(), xperi.begin(),xaphe.begin(), serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = rtn, 
+                            Rcpp::Named("xnasc") = xnasc,
+                            Rcpp::Named("xndsc") = xndsc,
+                            Rcpp::Named("xperi") = xperi,
+                            Rcpp::Named("xaphe") = xaphe,
+                            Rcpp::Named("serr") = std::string(serr.begin())
+  );
+}
+
+//' @details
+//' \describe{
+//'   \item{swe_nod_aps()}{Compute planetary nodes and apsides (perihelia, aphelia, second focal points of the orbital ellipses).}
+//'   }
+//' @return \code{swe_nod_aps} returns a list with named entries:
+//'      \code{return} status flag as integer, \code{xnasc} ascending nodes as numeric vector,
+//'      \code{xndsc} descending nodes as numeric vector, \code{xperi} perihelion as numeric vector, \code{xaphe} aphelion as numeric vector and \code{serr} error message as string
+//' @rdname Section5
+//' @export
+// [[Rcpp::export(swe_nod_aps)]]
+Rcpp::List nod_aps(double jd_et, int ipl, int iflag, int method) {
+  std::array<double, 6> xnasc{0.0};
+  std::array<double, 6> xndsc{0.0};
+  std::array<double, 6> xperi{0.0};
+  std::array<double, 6> xaphe{0.0};
+  std::array<char, 256> serr{'\0'};
+  int rtn = swe_nod_aps(jd_et, ipl, iflag,method,  xnasc.begin(), xndsc.begin(), xperi.begin(),xaphe.begin(), serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = rtn, 
+                            Rcpp::Named("xnasc") = xnasc,
+                            Rcpp::Named("xndsc") = xndsc,
+                            Rcpp::Named("xperi") = xperi,
+                            Rcpp::Named("xaphe") = xaphe,
+                            Rcpp::Named("serr") = std::string(serr.begin())
+  );
+}
+
+//' @details
+//' \describe{
+//'   \item{swe_get_orbital_elements()}{This function calculates osculating elements (Kepler elements) and orbital periods.}
+//'   }
+//' @return \code{swe_get_orbital_elements} returns a list with named entries:
+//'      \code{return} status flag as integer, \code{dret} function results as numeric vector and \code{serr} error message as string
+//' @rdname Section5
+//' @export
+// [[Rcpp::export(swe_get_orbital_elements)]]
+Rcpp::List get_orbital_elements(double jd_et, int ipl, int iflag) {
+  std::array<double, 50> dret{0.0};
+  std::array<char, 256> serr{'\0'};
+  int rtn = swe_get_orbital_elements(jd_et, ipl, iflag, dret.begin(), serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = rtn, 
+                            Rcpp::Named("dret") = dret,
+                            Rcpp::Named("serr") = std::string(serr.begin())
+  );
+}
+
+//' @details
+//' \describe{
+//'   \item{swe_orbit_max_min_true_distance()}{This function calculates the maximum possible distance, the minimum possible distance and the current true distance of planet.}
+//'   }
+//' @return \code{swe_orbit_max_min_true_distance} returns a list with named entries:
+//'      \code{return} status flag as integer, \code{dmax} maximum distance as double,
+//'      \code{dmin} minimum distance as double, \code{dtrue} true distance as double and \code{serr} error message as string
+//' @rdname Section5
+//' @export
+// [[Rcpp::export(swe_orbit_max_min_true_distance)]]
+Rcpp::List orbit_max_min_true_distance(double jd_et, int ipl, int iflag) {
+  double dmax;
+  double dmin;
+  double dtrue;
+  std::array<char, 256> serr{'\0'};
+  int rtn = swe_orbit_max_min_true_distance(jd_et, ipl, iflag,&dmax,&dmin,&dtrue, serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = rtn, 
+                            Rcpp::Named("dmax") = dmax,
+                            Rcpp::Named("dmin") = dmin,
+                            Rcpp::Named("dtrue") = dtrue,
+                            Rcpp::Named("serr") = std::string(serr.begin())
+  );
+}
+
+//////////////////////////////////////////////////////////////////////////
 //' @title Section 6: Eclipses, Risings, Settings, Meridian Transits, Planetary Phenomena
 //' @name Section6
 //' @description Functions for: determining eclipse and occultation calculations, computing the times of rising, setting and
 //' meridian transits for all planets, asteroids, the moon and the fixed stars; computing phase, phase angle, elongation,
 //' apparent diameter, apparent magnitude for the Sun, the Moon, all planets and asteroids; and determining
 //' heliacal phenomenon after a given start date
-//' @seealso Section 6 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @seealso Section 6 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
 //' @param jd_et  ET Julian day number as double (day)
 //' @param ipl  Body/planet as integer (\code{SE$SUN=0}, \code{SE$MOON=1}, ... \code{SE$PLUTO=9})
 //' @param starname  Star name as string (\code{""} for no star)
 //' @param jd_ut  UT Julian day number as double (day)
+//' @param jd_start  Julian day number as double (UT)
 //' @param calc_flag Calculation flag as integer (refraction direction (\code{SE$TRUE_TO_APP=0} or \code{SE$APP_TO_TRUE=1}))
 //' @param coord_flag Coordinate flag as integer (reference system (\code{SE$ECL2HOR=0} or \code{SE$EQU2HOR=1}))
 //' @param atpress Atmospheric pressure as double (hPa)
 //' @param attemp Atmospheric temperature as double (Celsius)
+//' @param geopos position as numeric vector (longitude, latitude, height)
+//' @param backward backwards search as boolean (TRUE)
 //' @param ephe_flag Ephemeris flag as integer (\code{SE$FLG_JPLEPH=1}, \code{SE$FLG_SWIEPH=2} or \code{SE$FLG_MOSEPH=4})
+//' @param ifltype eclipse type as integer (\code{SE$ECL_CENTRAL=1}, \code{SE$ECL_NONCENTRAL=2},
+//'  \code{SE$ECL_TOTAL=4}, \code{SE$ECL_ANNULAR=8}, \code{SE$ECL_PARTIAL=16}, \code{SE$ECL_ANNULAR_TOTAL=32} or 0 for any)
 //' @param horhgt Horizon apparent altitude as double (deg)
 //' @param xin  Position of body as numeric vector (either ecliptical or equatorial coordinates, depending on coord_flag)
 //' @param rsmi  Event flag as integer (e.g.: \code{SE$CALC_RISE=1}, \code{SE$CALC_SET=2}, \code{SE$CALC_MTRANSIT=4}, \code{SE$CALC_ITRANSIT=8})
@@ -289,9 +416,15 @@ Rcpp::List fixstar2_mag(Rcpp::CharacterVector starname) {
 //' @examples
 //' data(SE)
 //' swe_sol_eclipse_when_loc(1234567,SE$FLG_MOSEPH,c(0,50,10),FALSE)
+//' swe_sol_eclipse_when_glob(1234567,SE$FLG_MOSEPH,SE$ECL_TOTAL+SE$ECL_CENTRAL+SE$ECL_NONCENTRAL,FALSE)
+//' swe_sol_eclipse_how(1234580.19960447,SE$FLG_MOSEPH,c(0,50,10))
+//' swe_sol_eclipse_where(1234771.68584597,SE$FLG_MOSEPH)
+//' swe_lun_occult_when_loc(1234567,SE$VENUS,"",SE$FLG_MOSEPH+SE$ECL_ONE_TRY,c(0,50,10),FALSE)
+//' swe_lun_occult_when_glob(1234567,SE$VENUS,"",SE$FLG_MOSEPH+SE$ECL_ONE_TRY,SE$ECL_TOTAL,FALSE)
+//' swe_lun_occult_where(1234590.44756319,SE$VENUS,"",SE$FLG_MOSEPH+SE$ECL_ONE_TRY)
 //' swe_lun_eclipse_when_loc(1234567,SE$FLG_MOSEPH,c(0,50,10),FALSE)
-//' swe_lun_eclipse_how(1234580.19960447,SE$FLG_MOSEPH,c(0,50,10))
 //' swe_lun_eclipse_when(1234567,SE$FLG_MOSEPH,SE$ECL_CENTRAL,FALSE)
+//' swe_lun_eclipse_how(1234580.19960447,SE$FLG_MOSEPH,c(0,50,10))
 //' swe_rise_trans_true_hor(1234567.5,SE$SUN,"",SE$FLG_MOSEPH,0,c(0,50,10),1013.25,15,0)
 //' swe_pheno_ut(1234567,1,SE$FLG_MOSEPH)
 //' swe_pheno(1234567,1,SE$FLG_MOSEPH)
@@ -328,10 +461,133 @@ Rcpp::List sol_eclipse_when_loc(double jd_start, int ephe_flag, Rcpp::NumericVec
 
 //' @details
 //' \describe{
+//' \item{swe_sol_eclipse_when_glob()}{Find the next solar eclipse on earth.}
+//' }
+//' @return \code{swe_sol_eclipse_when_glob} returns a list with named entries:
+//'      \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector
+//'      and \code{serr} error warning as string
+//' @rdname Section6
+//' @export
+// [[Rcpp::export(swe_sol_eclipse_when_glob)]]
+Rcpp::List sol_eclipse_when_glob(double jd_start, int ephe_flag, int ifltype, bool backward) {
+  std::array<double, 20> tret{0.0};
+  std::array<char, 256> serr{'\0'};
+  int rtn = swe_sol_eclipse_when_glob(jd_start, ephe_flag, ifltype, tret.begin(), backward, serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = rtn, Rcpp::Named("tret") = tret,
+                            Rcpp::Named("serr") = std::string(serr.begin())
+  );
+}
+
+//' @details
+//' \describe{
+//' \item{swe_sol_eclipse_how()}{Compute the attributes of a solar eclipse for a given time.}
+//' }
+//' @return \code{swe_sol_eclipse_how} returns a list with named entries:
+//'      \code{return} status flag as integer,
+//'      \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
+//' @rdname Section6
+//' @export
+// [[Rcpp::export(swe_sol_eclipse_how)]]
+Rcpp::List sol_eclipse_how(double jd_ut, int ephe_flag, Rcpp::NumericVector geopos) {
+  if (geopos.length() < 3) Rcpp::stop("Geographic position 'geopos' must have a length of 3");
+  std::array<double, 20> attr{0.0};
+  std::array<char, 256> serr{'\0'};
+  int rtn = swe_sol_eclipse_how(jd_ut, ephe_flag, geopos.begin(), attr.begin(), serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = rtn,
+                            Rcpp::Named("attr") = attr,
+                            Rcpp::Named("serr") = std::string(serr.begin())
+  );
+}
+
+//' @details
+//' \describe{
+//' \item{swe_sol_eclipse_where()}{Compute the geographic position of a solar eclipse path.}
+//' }
+//' @return \code{swe_sol_eclipse_where} returns a list with named entries:
+//'      \code{return} status flag as integer, \code{pathpos} geographic path positions as numeric vector,
+//'      \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
+//' @rdname Section6
+//' @export
+// [[Rcpp::export(swe_sol_eclipse_where)]]
+Rcpp::List sol_eclipse_where(double jd_ut, int ephe_flag) {
+  std::array<double, 15> pathpos{0.0};
+  std::array<double, 20> attr{0.0};
+  std::array<char, 256> serr{'\0'};
+  int rtn = swe_sol_eclipse_where(jd_ut, ephe_flag, pathpos.begin(), attr.begin(), serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = rtn,
+                            Rcpp::Named("pathpos") = pathpos,
+                            Rcpp::Named("attr") = attr,
+                            Rcpp::Named("serr") = std::string(serr.begin())
+  );
+}
+
+//' @details
+//' \describe{
+//' \item{swe_lun_occult_when_loc()}{Find the next lunar occultation with planet or star at a certain position.}
+//' }
+//' @return \code{swe_lun_occult_when_loc} returns a list with named entries:
+//'      \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector,
+//'      \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
+//' @rdname Section6
+//' @export
+// [[Rcpp::export(swe_lun_occult_when_loc)]]
+Rcpp::List lun_occult_when_loc(double jd_start, int ipl, std::string starname,int ephe_flag, Rcpp::NumericVector geopos, bool backward) {
+  if (geopos.length() < 3) Rcpp::stop("Geographic position 'geopos' must have a length of 3");
+  std::array<double, 10> tret{0.0};
+  std::array<double, 20> attr{0.0};
+  std::array<char, 256> serr{'\0'};
+  int rtn = swe_lun_occult_when_loc(jd_start, ipl,&starname[0], ephe_flag, geopos.begin(), tret.begin(), attr.begin(), backward, serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = rtn, Rcpp::Named("tret") = tret,
+                            Rcpp::Named("attr") = attr,
+                            Rcpp::Named("serr") = std::string(serr.begin())
+  );
+}
+
+//' @details
+//' \describe{
+//' \item{swe_lun_occult_when_glob()}{Find the next lunar occultation with planet or star somewhere on the earth.}
+//' }
+//' @return \code{swe_lun_occult_when_glob} returns a list with named entries:
+//'      \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector,
+//'      \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
+//' @rdname Section6
+//' @export
+// [[Rcpp::export(swe_lun_occult_when_glob)]]
+Rcpp::List lun_occult_when_glob(double jd_start, int ipl, std::string starname,int ephe_flag, int ifltype, bool backward) {
+  std::array<double, 10> tret{0.0};
+  std::array<char, 256> serr{'\0'};
+  int rtn = swe_lun_occult_when_glob(jd_start, ipl,&starname[0], ephe_flag,ifltype,tret.begin(), backward, serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = rtn, Rcpp::Named("tret") = tret,
+                            Rcpp::Named("serr") = std::string(serr.begin())
+  );
+}
+
+//' @details
+//' \describe{
+//' \item{swe_lun_occult_where()}{Compute the geographic position of an occultation path.}
+//' }
+//' @return \code{swe_lun_occult_where} returns a list with named entries:
+//'      \code{return} status flag as integer, \code{pathpos} geographic path positions as numeric vector,
+//'      \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
+//' @rdname Section6
+//' @export
+// [[Rcpp::export(swe_lun_occult_where)]]
+Rcpp::List lun_occult_where(double jd_ut, int ipl, std::string starname,int ephe_flag) {
+  std::array<double, 15> pathpos{0.0};
+  std::array<double, 20> attr{0.0};
+  std::array<char, 256> serr{'\0'};
+  int rtn = swe_lun_occult_where(jd_ut, ipl, &starname[0],ephe_flag, pathpos.begin(), attr.begin(), serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = rtn,
+                            Rcpp::Named("pathpos") = pathpos,
+                            Rcpp::Named("attr") = attr,
+                            Rcpp::Named("serr") = std::string(serr.begin())
+  );
+}
+
+//' @details
+//' \describe{
 //' \item{swe_lun_eclipse_when_loc()}{Find the next lunar eclipse for a given geographic position.}
 //' }
-//' @param geopos position as numeric vector (longitude, latitude, height)
-//' @param backward backwards search as boolean (TRUE)
 //' @return \code{swe_lun_eclipse_when_loc} returns a list with named entries:
 //'      \code{return} status flag as integer, \code{tret} for eclipse timing moments,
 //'      \code{attr} phenomena during eclipse and \code{serr} error warning as string
@@ -354,7 +610,6 @@ Rcpp::List lun_eclipse_when_loc(double jd_start, int ephe_flag, Rcpp::NumericVec
 //' \describe{
 //' \item{swe_lun_eclipse_how()}{Compute the attributes of a lunar eclipse for a given time.}
 //' }
-//' @param jd_start  Julian day number as double (UT)
 //' @return \code{swe_lun_eclipse_how} returns a list with named entries:
 //'      \code{return} status flag as integer,
 //'      \code{attr} phenomena during eclipse as numeric vector and \code{serr} error message as string
@@ -372,13 +627,10 @@ Rcpp::List lun_eclipse_how(double jd_ut, int ephe_flag, Rcpp::NumericVector geop
   );
 }
 
-
 //' @details
 //' \describe{
 //' \item{swe_lun_eclipse_when()}{Find the next lunar eclipse on earth.}
 //' }
-//' @param ifltype eclipse type as integer (\code{SE$ECL_CENTRAL=1}, \code{SE$ECL_NONCENTRAL=2},
-//'  \code{SE$ECL_TOTAL=4}, \code{SE$ECL_ANNULAR=8}, \code{SE$ECL_PARTIAL=16} or \code{SE$ECL_ANNULAR_TOTAL=32})
 //' @return \code{swe_lun_eclipse_when} returns a list with named entries:
 //'      \code{return} status flag as integer, \code{tret} for eclipse timing moments as numeric vector
 //'      and \code{serr} error warning as string
@@ -413,7 +665,6 @@ Rcpp::List rise_trans_true_hor(double jd_ut, int ipl, std::string starname, int 
                             Rcpp::Named("tret") = tret,
                             Rcpp::Named("serr") = std::string(serr.begin()));
 }
-
 
 //' @details
 //' \describe{
@@ -473,7 +724,7 @@ Rcpp::List azalt(double jd_ut, int coord_flag, Rcpp::NumericVector geopos, doubl
 
 //' @details
 //' \describe{
-//' \item{swe_azalt_rev()}{compute either ecliptical or equatorial coordinates from azimuth and true altitude.
+//' \item{swe_azalt_rev()}{Compute either ecliptical or equatorial coordinates from azimuth and true altitude.
 //' If only an apparent altitude is given, the true altitude has to be computed first with
 //' e.g. the function swe_refrac_extended().}
 //' }
@@ -491,12 +742,25 @@ Rcpp::List azalt_rev(double jd_ut, int coord_flag, Rcpp::NumericVector geopos, R
 
 //' @details
 //' \describe{
+//' \item{swe_refrac()}{Calculate either the topocentric altitude from the apparent altitude
+//' or the apparent altitude from the topocentric altitude.}
+//' }
+//' @param InAlt  object's apparent/topocentric altitude as double (depending on calc_flag) (deg)
+//' @return \code{swe_refrac} returns the (apparent/topocentric) altitude as double (deg)
+//' @rdname Section6
+//' @export
+// [[Rcpp::export(swe_refrac)]]
+double refrac(double InAlt, double atpress, double attemp, int calc_flag) {
+  return swe_refrac(InAlt,atpress,attemp,calc_flag);
+}
+
+//' @details
+//' \describe{
 //' \item{swe_refrac_extended()}{Calculate either the topocentric altitude from the apparent altitude
 //' or the apparent altitude from the topocentric altitude.
 //' It allows correct calculation of refraction for heights above sea > 0,
 //' where the ideal horizon and planets that are visible may have a negative altitude. }
 //' }
-//' @param InAlt  object's apparent/topocentric altitude as double (depending on calc_flag) (deg)
 //' @param height  observer's height as double (m)
 //' @param lapse_rate  lapse rate as double (K/m)
 //' @return \code{swe_refrac_extended} returns a list with named entries: \code{return} status flag as integer,
@@ -505,7 +769,7 @@ Rcpp::List azalt_rev(double jd_ut, int coord_flag, Rcpp::NumericVector geopos, R
 //' @export
 // [[Rcpp::export(swe_refrac_extended)]]
 Rcpp::List refrac_extended(double InAlt, double height, double atpress, double attemp, double lapse_rate, int calc_flag) {
-  std::array<double, 10> dret{0.0};
+  std::array<double, 20> dret{0.0};
   double i = swe_refrac_extended(InAlt,height,atpress,attemp,lapse_rate,calc_flag, dret.begin());
   return Rcpp::List::create(Rcpp::Named("return") = i,
                             Rcpp::Named("dret") = dret);
@@ -635,44 +899,56 @@ Rcpp::List heliacal_angle(double jd_ut, Rcpp::NumericVector dgeo, Rcpp::NumericV
                             Rcpp::Named("serr") = std::string(serr.begin()));
 }
 
-// to be added in future:
-// swe_sol_eclipse_when_glob( tjd...) finds the next eclipse globally.
-// swe_sol_eclipse_where() computes the geographic location of a solar eclipse for a given tjd.
-// swe_sol_eclipse_how() computes attributes of a solar eclipse for a given tjd, geographic longitude, latitude and height.
-
-// swe_lun_occult_when_loc( tjd...) finds the next occultation for a body and a given geographic position.
-// swe_lun_occult_when_glob( tjd...) finds the next occultation of a given body globally.
-// swe_lun_occult_where() computes the geographic location of an occultation for a given tjd.
-
-
 //////////////////////////////////////////////////////////////////////////
 //' @title Section 7: Date and time conversion functions
 //' @name Section7
 //' @description Functions related to calendar and time conversions.
-//' @seealso Section 7 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @seealso Section 7 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
 //' @details
 //' \describe{
 //'   \item{swe_julday()}{Convert calendar dates to the astronomical time scale which measures time in Julian day number.}
 //'   \item{swe_date_conversion()}{Convert calendar dates to the astronomical time scale which measures time in Julian day
 //'   number and checks if the calendar date is legal.}
 //'   \item{swe_revjul()}{Compute year, month, day and hour from a Julian day number.}
+//'   \item{swe_utc_time_zone()}{Convert local time to UTC and UTC to local time.}
+//'   \item{swe_utc_to_jd()}{Convert UTC to Julian day number (UT and ET).}
+//'   \item{swe_jdet_to_utc()}{Convert Julian day number (ET) into UTC.}
+//'   \item{swe_jdut1_to_utc()}{Convert Julian day number (UT1) into UTC.}
+//'   \item{swe_time_equ()}{Calculate equation of time (LAT-LMT).}
+//'   \item{swe_lmt_to_lat()}{Convert Julian day number (LMT) into Julian day number (LAT).}
+//'   \item{swe_lat_to_lmt()}{Convert Julian day number (LAT) into Julian day number (LMT).}
 //' }
 //' @examples
 //' data(SE)
 //' swe_julday(2000,1,1,12,SE$GREG_CAL)
 //' swe_date_conversion(2000,1,1,12,"g")
 //' swe_revjul(2452500,SE$GREG_CAL)
+//' swe_utc_time_zone(2000,1,1,12,5,1.2,2)
+//' swe_utc_to_jd(2000,1,1,0,12,3.4,SE$GREG_CAL)
+//' swe_jdet_to_utc(2452500,SE$GREG_CAL)
+//' swe_jdut1_to_utc(2452500,SE$GREG_CAL)
+//' swe_time_equ(2452500)
+//' swe_lmt_to_lat(2452500,0)
+//' swe_lat_to_lmt(2452500,0)
 //' @param year  Astronomical year as integer
 //' @param month  Month as integer
 //' @param day  Day as integer
-//' @param hour  Hour as double
+//' @param hourd  Hour as double
+//' @param houri  Hour as integer
+//' @param min  min as integer
+//' @param sec  Second as double
+//' @param geolon  geographic longitude as double (deg)
 //' @param gregflag  Calendar type as integer (SE$JUL_CAL=0 or SE$GREG_CAL=1)
+//' @param jd_et  Julian day number (ET) as double (day)
+//' @param jd_ut  Julian day number (UT) as double (day)
+//' @param jd_lmt  Julian day number (LMT=UT+geolon/360) as double (day)
+//' @param jd_lat  Julian day number (LAT) as double (day)
 //' @rdname Section7
 //' @export
 // [[Rcpp::export(swe_julday)]]
-double julday(int year, int month, int day, double hour, int gregflag) {
+double julday(int year, int month, int day, double hourd, int gregflag) {
     double i;
-    i = swe_julday(year, month, day, hour, gregflag);
+    i = swe_julday(year, month, day, hourd, gregflag);
   return i;
 }
 
@@ -682,9 +958,9 @@ double julday(int year, int month, int day, double hour, int gregflag) {
 //' @rdname Section7
 //' @export
 // [[Rcpp::export(swe_date_conversion)]]
-Rcpp::List date_conversion(int year, int month, int day, double hour, char cal) {
+Rcpp::List date_conversion(int year, int month, int day, double hourd, char cal) {
   double jd;
-  int i = swe_date_conversion(year, month, day, hour, cal, &jd);
+  int i = swe_date_conversion(year, month, day, hourd, cal, &jd);
   return Rcpp::List::create(Rcpp::Named("return") = i,
                             Rcpp::Named("jd") = jd);
 }
@@ -707,18 +983,143 @@ Rcpp::List revjul(double jd, int gregflag ) {
                             Rcpp::Named("hour") = hour);
 }
 
+//' @param d_timezone  Timezone offset as double (hour)
+//' @return \code{swe_utc_time_zone} returns a list with named entries: \code{year_out} year as integer,
+//'      \code{month_out} month as integer, \code{day_out} day as integer, \code{hour_out} hour as integer, \code{min_out} minute as integer, 
+//'      \code{sec_out} second as double,
+//' @rdname Section7
+//' @export
+// [[Rcpp::export(swe_utc_time_zone)]]
+Rcpp::List utc_time_zone(int year, int month, int day, int houri, int min, double sec, double d_timezone) {
+  int year_out;
+  int month_out;
+  int day_out;
+  int hour_out;
+  int min_out;
+  double sec_out;
+  swe_utc_time_zone(year, month, day, houri, min, sec, d_timezone, &year_out,&month_out,&day_out,&hour_out,&min_out,&sec_out);
+  return Rcpp::List::create(Rcpp::Named("year_out") = year_out,
+                            Rcpp::Named("month_out") = month_out,
+                            Rcpp::Named("day_out") = day_out,
+                            Rcpp::Named("hour_out") = hour_out,
+                            Rcpp::Named("min_out") = min_out,
+                            Rcpp::Named("sec_out") = sec_out
+                            );
+}
+
+//' @return \code{swe_utc_to_jd} returns a list with named entries: \code{return} status flag as integer,
+//'      \code{dret} Julian day number as numeric vector and \code{serr} for error message as string.
+//' @rdname Section7
+//' @export
+// [[Rcpp::export(swe_utc_to_jd)]]
+Rcpp::List utc_to_jd (int year, int month, int day, int houri, int min, double sec, int gregflag) {
+  std::array<char, 256> serr{'\0'};
+  std::array<double, 2> dret{0.0};
+  int i = swe_utc_to_jd(year, month, day, houri, min,sec,gregflag, dret.begin(),serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = i,
+                            Rcpp::Named("dret") = dret,
+                            Rcpp::Named("serr") = std::string(serr.begin()));
+}
+
+//' @return \code{swe_jdet_to_utc} returns a list with named entries: \code{year_out} year as integer,
+//'      \code{month_out} month as integer, \code{day_out} day as integer, \code{hour_out} hour as integer, \code{min_out} minute as integer, 
+//'      \code{sec_out} second as double,
+//' @rdname Section7
+//' @export
+// [[Rcpp::export(swe_jdet_to_utc )]]
+Rcpp::List jdet_to_utc(double jd_et, int gregflag) {
+  int year_out;
+  int month_out;
+  int day_out;
+  int hour_out;
+  int min_out;
+  double sec_out;
+  swe_jdet_to_utc(jd_et,gregflag, &year_out,&month_out,&day_out,&hour_out,&min_out,&sec_out);
+  return Rcpp::List::create(Rcpp::Named("year_out") = year_out,
+                            Rcpp::Named("month_out") = month_out,
+                            Rcpp::Named("day_out") = day_out,
+                            Rcpp::Named("hour_out") = hour_out,
+                            Rcpp::Named("min_out") = min_out,
+                            Rcpp::Named("sec_out") = sec_out
+  );
+}
+
+//' @return \code{swe_jdut1_to_utc} returns a list with named entries: \code{year_out} year as integer,
+//'      \code{month_out} month as integer, \code{day_out} day as integer, \code{hour_out} hour as integer, \code{min_out} minute as integer, 
+//'      \code{sec_out} second as double,
+//' @rdname Section7
+//' @export
+// [[Rcpp::export(swe_jdut1_to_utc)]]
+Rcpp::List jdut1_to_utc(double jd_ut, int gregflag) {
+  int year_out;
+  int month_out;
+  int day_out;
+  int hour_out;
+  int min_out;
+  double sec_out;
+  swe_jdut1_to_utc(jd_ut,gregflag, &year_out,&month_out,&day_out,&hour_out,&min_out,&sec_out);
+  return Rcpp::List::create(Rcpp::Named("year_out") = year_out,
+                            Rcpp::Named("month_out") = month_out,
+                            Rcpp::Named("day_out") = day_out,
+                            Rcpp::Named("hour_out") = hour_out,
+                            Rcpp::Named("min_out") = min_out,
+                            Rcpp::Named("sec_out") = sec_out
+  );
+}
+
+//' @return \code{swe_swe_time_equ} returns a list with named entries: \code{return} status flag as integer,
+//'      \code{e} equation of time (day) as double and \code{serr} for error message as string.
+//' @rdname Section7
+//' @export
+// [[Rcpp::export(swe_time_equ)]]
+Rcpp::List time_equ(double jd_ut) {
+  std::array<char, 256> serr{'\0'};
+  double e;
+  int i = swe_time_equ(jd_ut,&e,serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = i,
+                            Rcpp::Named("e") = e,
+                            Rcpp::Named("serr") = std::string(serr.begin()));
+}
+
+//' @return \code{swe_lmt_to_lat} returns a list with named entries: \code{return} status flag as integer,
+//'      \code{jd_lat} Julian day number (LAT) (day) as double and \code{serr} for error message as string.
+//' @rdname Section7
+//' @export
+// [[Rcpp::export(swe_lmt_to_lat)]]
+Rcpp::List lmt_to_lat(double jd_lmt, double geolon) {
+  std::array<char, 256> serr{'\0'};
+  double jd_lat;
+  int i = swe_lmt_to_lat(jd_lmt,geolon,&jd_lat,serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = i,
+                            Rcpp::Named("jd_lat") = jd_lat,
+                            Rcpp::Named("serr") = std::string(serr.begin()));
+}
+
+//' @return \code{swe_lat_to_lmt} returns a list with named entries: \code{return} status flag as integer,
+//'      \code{jd_lmt} Julian day number (LMT) (day) as double and \code{serr} for error message as string.
+//' @rdname Section7
+//' @export
+// [[Rcpp::export(swe_lat_to_lmt)]]
+Rcpp::List lat_to_lmt(double jd_lat, double geolon) {
+  std::array<char, 256> serr{'\0'};
+  double jd_lmt;
+  int i = swe_lat_to_lmt(jd_lat,geolon,&jd_lmt,serr.begin());
+  return Rcpp::List::create(Rcpp::Named("return") = i,
+                            Rcpp::Named("jd_lmt") = jd_lmt,
+                            Rcpp::Named("serr") = std::string(serr.begin()));
+}
 
 //////////////////////////////////////////////////////////////////////////
 //' @title Section 8: Delta T-related functions
 //' @name Section8
 //' @description Functions related to DeltaT and tidal acceleration
-//' @seealso Section 8 in \url{http://www.astro.com/swisseph/swephprg.htm}
-//' @param ephe_flag  ephemeris flag as integer (SE$FLG_JPLEPH=1, SE$FLG_SWIEPH=2 or SE$FLG_MOSEPH=4) (section 2.3.2)
+//' @seealso Section 8 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
+//' @param ephe_flag  ephemeris flag as integer (SE$FLG_JPLEPH=1, SE$FLG_SWIEPH=2 or SE$FLG_MOSEPH=4)
 //' @details
 //' \describe{
 //' \item{swe_deltat_ex()}{Determine DeltaT from Julian day number for a specific ephemeris.}
 //' }
-//' @param jd_ut  Julian day number (UT) as numeric vector (day)
+//' @param jd_ut Julian day number (UT) as numeric vector (day)
 //' @param t_acc Tidal acceleration as double (arcsec/century^2)
 //' @param delta_t DeltaT (day)
 //' @examples
@@ -806,7 +1207,7 @@ void set_delta_t_userdef (double delta_t) {
 //' @title Section 9: The function for calculating topocentric planet position
 //' @name Section9
 //' @description Function for topocentric planet positions
-//' @seealso Section 9 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @seealso Section 9 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
 //' @details
 //' \describe{
 //' \item{swe_set_topo()}{Set the topocentric location of the observer.}
@@ -827,8 +1228,8 @@ void set_topo(double longitude, double lat, double height) {
 //' @title Section 10: Sidereal mode functions
 //' @name Section10
 //' @description Functions to support the determination of sidereal information
-//' @seealso Section 10 in \url{http://www.astro.com/swisseph/swephprg.htm}
-//' @param iflag Computation flag as integer, many options possible (section 2.3,1)
+//' @seealso Section 10 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
+//' @param iflag Computation flag as integer, many options possible (section 2.3)
 //' @param sid_mode  Sidereal mode as integer
 //' @details
 //' \describe{
@@ -904,7 +1305,7 @@ Rcpp::List get_ayanamsa_ex(double jd_et, int iflag){
 //' @title Section 13: House cusp, ascendant and Medium Coeli calculations
 //' @name Section13
 //' @description Calculate house cusp, ascendant, Medium Coeli, etc. calculations
-//' @seealso Section 13 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @seealso Section 13 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
 //' @param geolat  geographic latitude as double (deg)
 //' @param geolon  geographic longitude as double (deg)
 //' @param hsys  house method, one-letter case sensitive as char
@@ -971,7 +1372,7 @@ std::string house_name(char hsys) {
 //' @title Section 14: House position calculations
 //' @name Section14
 //' @description Calculate house position of a given body.
-//' @seealso Section 14 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @seealso Section 14 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
 //' @param geolat  geographic latitude as double (deg)
 //' @param hsys  house method, one-letter case sensitive as char
 //' @param armc  right ascension of the MC as double (deg)
@@ -1032,7 +1433,7 @@ Rcpp::List gauquelin_sector(double jd_ut, int ipl, std::string starname, int eph
 //' @title Section 15: Sidereal time
 //' @name Section15
 //' @description Calculate the sidereal time (in degrees).
-//' @seealso Section 15 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @seealso Section 15 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
 //' @details
 //' \describe{
 //' \item{swe_sidtime()}{Determine the sidereal time.}
@@ -1052,7 +1453,7 @@ double sidtime(double jd_ut) {
 //' @title Section 16.7: Other functions that may be useful
 //' @name Section16
 //' @description Useful functions
-//' @seealso Section 16.7 in \url{http://www.astro.com/swisseph/swephprg.htm}
+//' @seealso Section 16.7 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
 //' @details
 //' \describe{
 //'   \item{swe_day_of_week()}{Determine day of week from Julian day number.}

@@ -25,7 +25,7 @@ swe_get_ayanamsa_ex(jd_et, iflag)
 
 \item{jd_ut}{UT Julian day number as double (day)}
 
-\item{iflag}{Computation flag as integer, many options possible (section 2.3,1)}
+\item{iflag}{Computation flag as integer, many options possible (section 2.3)}
 
 \item{jd_et}{ET Julian day number as double (day)}
 }
@@ -66,5 +66,5 @@ swe_get_ayanamsa_ex_ut(2458346.82639,SE$FLG_MOSEPH)
 swe_get_ayanamsa_ex(2458346.82639,SE$FLG_MOSEPH)
 }
 \seealso{
-Section 10 in \url{http://www.astro.com/swisseph/swephprg.htm}
+Section 10 in \url{http://www.astro.com/swisseph/swephprg.htm}. Remember that array indices start in R at 1, while in C they start at 0!
 }

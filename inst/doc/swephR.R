@@ -6,7 +6,6 @@ knitr::opts_chunk$set(
 
 ## ------------------------------------------------------------------------
 library(swephR)
-data(SE)
 
 ## ---- eval = FALSE-------------------------------------------------------
 #  swe_set_ephe_path("C:\\sweph\\ephe")
@@ -39,8 +38,7 @@ result
 ## ------------------------------------------------------------------------
   options(digits=6)
   swe_set_ephe_path(NULL)
-  data(SE)
-  iflag = SE$FLG_SPEED
+  iflag = SE$FLG_SPEED + SE$FLG_MOSEPH
   {
     #get year
     jyear <- 2000

@@ -16,8 +16,8 @@ status](https://www.r-pkg.org/badges/version/swephR)](https://cran.r-project.org
 
 The goal of swephR is to provide an R interface to the [Swiss
 Ephemeris](https://www.astro.com/swisseph/). The Swiss Ephemeris is a
-high precision ephemeris based upon the DE431 ephemeris from NASA’s
-JPL. It covers the time range 13201 BC to AD 17191.
+high precision ephemeris based upon the DE431 ephemeris from NASA’s JPL.
+It covers the time range 13201 BCE to 17191 CE.
 
 ## Installation
 
@@ -56,7 +56,6 @@ Ephemeris), you do the following steps:
 
 ``` r
 library(swephR)
-data(SE)
 swe_version()
 #> [1] "2.08"
 ```
@@ -85,11 +84,11 @@ result <- swe_calc_ut(jdut, ipl, iflag)
 result
 #> $return
 #> [1] 260
-#>
+#> 
 #> $xx
 #> [1]  2.803689e+02  2.323265e-04  9.833276e-01  1.019432e+00 -8.922802e-07
 #> [6] -7.339410e-06
-#>
+#> 
 #> $serr
 #> [1] ""
 ```
@@ -102,14 +101,14 @@ result <- swe_fixstar2_ut(starname, jdut, iflag)
 result
 #> $return
 #> [1] 260
-#>
+#> 
 #> $starname
 #> [1] "Sirius,alCMa"
-#>
+#> 
 #> $xx
 #> [1]  1.040853e+02 -3.960507e+01  5.439322e+05  4.643164e-05 -7.119376e-05
 #> [6] -4.130539e-03
-#>
+#> 
 #> $serr
 #> [1] ""
 ```
