@@ -1,19 +1,17 @@
 /*********************************************************
-  $Header: /home/dieter/sweph/RCS/swedate.c,v 1.75 2009/04/08 07:17:29 dieter Exp $
-  version 15-feb-89 16:30
   
   swe_date_conversion()
   swe_revjul()
   swe_julday()
 
 ************************************************************/
-/* Copyright (C) 1997 - 2008 Astrodienst AG, Switzerland.  All rights reserved.
-  
+/* Copyright (C) 1997 - 2021 Astrodienst AG, Switzerland.  All rights reserved.
+
   License conditions
   ------------------
 
   This file is part of Swiss Ephemeris.
-  
+
   Swiss Ephemeris is distributed with NO WARRANTY OF ANY KIND.  No author
   or distributor accepts any responsibility for the consequences of using it,
   or for whether it serves any particular purpose or works at all, unless he
@@ -23,17 +21,17 @@
   system. The software developer, who uses any part of Swiss Ephemeris
   in his or her software, must choose between one of the two license models,
   which are
-  a) GNU public license version 2 or later
+  a) GNU Affero General Public License (AGPL)
   b) Swiss Ephemeris Professional License
-  
+
   The choice must be made before the software developer distributes software
   containing parts of Swiss Ephemeris to others, and before any public
   service using the developed software is activated.
 
-  If the developer choses the GNU GPL software license, he or she must fulfill
+  If the developer choses the AGPL software license, he or she must fulfill
   the conditions of that license, which includes the obligation to place his
-  or her whole software project under the GNU GPL or a compatible license.
-  See http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+  or her whole software project under the AGPL or a compatible license.
+  See https://www.gnu.org/licenses/agpl-3.0.html
 
   If the developer choses the Swiss Ephemeris Professional license,
   he must follow the instructions as found in http://www.astro.com/swisseph/ 
@@ -66,7 +64,7 @@
   This function converts some date+time input {y,m,d,uttime}
   into the Julian day number tjd.
   The function checks that the input is a legal combination
-  of dates; for illegal dates like 32 January 1993 it returns SE_ERR
+  of dates; for illegal dates like 32 January 1993 it returns ERR
   but still converts the date correctly, i.e. like 1 Feb 1993.
   The function is usually used to convert user input of birth data
   into the Julian day number. Illegal dates should be notified to the user.
@@ -80,7 +78,7 @@
   etc.
   Many users of Astro programs do not know about this difference.
 
-  Return: OK or SE_ERR (for illegal date)
+  Return: OK or ERR (for illegal date)
 *********************************************************/
 
 # include "swephexp.h"
@@ -108,7 +106,7 @@ int CALL_CONV swe_date_conversion(int y,
   if (rmon == m && rday == d && ryear == y) {
     return OK;
   } else {
-    return SE_ERR;
+    return ERR;
   }
 }
 
@@ -387,7 +385,7 @@ int32 CALL_CONV swe_utc_to_jd(int32 iyear, int32 imonth, int32 iday, int32 ihour
   if (iyear != iyear2 || imonth != imonth2 || iday != iday2) {
     if (serr != NULL)
       sprintf(serr, "invalid date: year = %d, month = %d, day = %d", iyear, imonth, iday);
-    return SE_ERR;
+    return ERR;
   }
   if (ihour < 0 || ihour > 23 
    || imin < 0 || imin > 59 
@@ -395,7 +393,7 @@ int32 CALL_CONV swe_utc_to_jd(int32 iyear, int32 imonth, int32 iday, int32 ihour
    || (dsec >= 60 && (imin < 59 || ihour < 23 || tjd_ut1 < J1972))) {
     if (serr != NULL)
       sprintf(serr, "invalid time: %d:%d:%.2f", ihour, imin, dsec);
-    return SE_ERR;
+    return ERR;
   }
   dhour = (double) ihour + ((double) imin) / 60.0 + dsec / 3600.0;
   /* 
@@ -450,7 +448,7 @@ int32 CALL_CONV swe_utc_to_jd(int32 iyear, int32 imonth, int32 iday, int32 ihour
     if (j != 1) {
       if (serr != NULL)
 	sprintf(serr, "invalid time (no leap second!): %d:%d:%.2f", ihour, imin, dsec);
-      return SE_ERR;
+      return ERR;
     }
   }
   /* 

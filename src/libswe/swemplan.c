@@ -1,12 +1,11 @@
 /* SWISSEPH
-   $Header: /home/dieter/sweph/RCS/swemplan.c,v 1.74 2008/06/16 10:07:20 dieter Exp $
    Moshier planet routines
 
    modified for SWISSEPH by Dieter Koch
 
 **************************************************************/
-/* Copyright (C) 1997 - 2008 Astrodienst AG, Switzerland.  All rights reserved.
-  
+/* Copyright (C) 1997 - 2021 Astrodienst AG, Switzerland.  All rights reserved.
+
   License conditions
   ------------------
 
@@ -21,17 +20,17 @@
   system. The software developer, who uses any part of Swiss Ephemeris
   in his or her software, must choose between one of the two license models,
   which are
-  a) GNU public license version 2 or later
+  a) GNU Affero General Public License (AGPL)
   b) Swiss Ephemeris Professional License
 
   The choice must be made before the software developer distributes software
   containing parts of Swiss Ephemeris to others, and before any public
   service using the developed software is activated.
 
-  If the developer choses the GNU GPL software license, he or she must fulfill
+  If the developer choses the AGPL software license, he or she must fulfill
   the conditions of that license, which includes the obligation to place his
-  or her whole software project under the GNU GPL or a compatible license.
-  See http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+  or her whole software project under the AGPL or a compatible license.
+  See https://www.gnu.org/licenses/agpl-3.0.html
 
   If the developer choses the Swiss Ephemeris Professional license,
   he must follow the instructions as found in http://www.astro.com/swisseph/ 
@@ -304,7 +303,7 @@ int swi_moshplan(double tjd, int ipli, AS_BOOL do_save, double *xpret, double *x
       if (strlen(serr) + strlen(s) < AS_MAXCH)
 	strcat(serr, s);
     }
-    return(SE_ERR);
+    return(ERR);
   }  
   /* earth, for geocentric position */
   if (do_earth) {
@@ -515,7 +514,7 @@ char *swi_get_fict_name(int32 ipl, char *snam)
 {
   if (read_elements_file(ipl, 0, NULL, NULL, 
        NULL, NULL, NULL, NULL, NULL, NULL, 
-       snam, NULL, NULL) == SE_ERR)
+       snam, NULL, NULL) == ERR)
     strcpy(snam, "name not found");
   return snam;
 }
@@ -594,8 +593,8 @@ int swi_osc_el_plan(double tjd, double *xp, int ipl, int ipli, double *xearth, d
    */
   if (read_elements_file(ipl, tjd, &tjd0, &tequ, 
        &mano, &sema, &ecce, &parg, &node, &incl, 
-       NULL, &fict_ifl, serr) == SE_ERR)
-    return SE_ERR;
+       NULL, &fict_ifl, serr) == ERR)
+    return ERR;
   dmot = 0.9856076686 * DEGTORAD / sema / sqrt(sema);	/* daily motion */
   if (fict_ifl & FICT_GEO)
     dmot /= sqrt(SUN_EARTH_MRAT);
@@ -710,7 +709,7 @@ static int read_elements_file(int32 ipl, double tjd,
     if (ipl >= SE_NFICT_ELEM) {
       if (serr != NULL)
         sprintf(serr, "error no elements for fictitious body no %7.0f", (double) ipl);
-      return SE_ERR;
+      return ERR;
     }
     if (tjd0 != NULL)
       *tjd0 = plan_oscu_elem[ipl][0];			/* epoch */
@@ -812,7 +811,7 @@ static int read_elements_file(int32 ipl, double tjd,
     if (mano != NULL) {
       retc = check_t_terms(tt, cpos[2], mano);
 	  *mano = swe_degnorm(*mano);
-      if (retc == SE_ERR) {
+      if (retc == ERR) {
         if (serr != NULL) {
           sprintf(serr, "%s mean anomaly value invalid", serri);
 	}
@@ -830,7 +829,7 @@ static int read_elements_file(int32 ipl, double tjd,
     /* semi-axis */
     if (sema != NULL) {
       retc = check_t_terms(tt, cpos[3], sema);
-      if (*sema <= 0 || retc == SE_ERR) {
+      if (*sema <= 0 || retc == ERR) {
         if (serr != NULL) {
           sprintf(serr, "%s semi-axis value invalid", serri);
 	}
@@ -840,7 +839,7 @@ static int read_elements_file(int32 ipl, double tjd,
     /* eccentricity */
     if (ecce != NULL) {
       retc = check_t_terms(tt, cpos[4], ecce);
-      if (*ecce >= 1 || *ecce < 0 || retc == SE_ERR) {
+      if (*ecce >= 1 || *ecce < 0 || retc == ERR) {
         if (serr != NULL) {
           sprintf(serr, "%s eccentricity invalid (no parabolic or hyperbolic orbits allowed)", serri);
 	}
@@ -851,7 +850,7 @@ static int read_elements_file(int32 ipl, double tjd,
     if (parg != NULL) {
       retc = check_t_terms(tt, cpos[5], parg);
 	  *parg = swe_degnorm(*parg);
-      if (retc == SE_ERR) {
+      if (retc == ERR) {
         if (serr != NULL) {
           sprintf(serr, "%s perihelion argument value invalid", serri);
 	}
@@ -863,7 +862,7 @@ static int read_elements_file(int32 ipl, double tjd,
     if (node != NULL) {
       retc = check_t_terms(tt, cpos[6], node);
 	  *node = swe_degnorm(*node);
-      if (retc == SE_ERR) {
+      if (retc == ERR) {
         if (serr != NULL) {
           sprintf(serr, "%s node value invalid", serri);
 	}
@@ -875,7 +874,7 @@ static int read_elements_file(int32 ipl, double tjd,
     if (incl != NULL) {
       retc = check_t_terms(tt, cpos[7], incl);
 	  *incl = swe_degnorm(*incl);
-      if (retc == SE_ERR) {
+      if (retc == ERR) {
         if (serr != NULL) {
           sprintf(serr, "%s inclination value invalid", serri);
 	}
@@ -910,7 +909,7 @@ static int read_elements_file(int32 ipl, double tjd,
   return OK;
 return_err:
   fclose(fp);
-  return SE_ERR;
+  return ERR;
 }
 #endif
 

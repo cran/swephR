@@ -1,5 +1,9 @@
 # NEWS for swephR
 
+## swephR 0.3.1
+
+* new upstream version v2.10.03
+
 ## swephR 0.3.0
 
 * support all functions from SE's C API

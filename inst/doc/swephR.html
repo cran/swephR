@@ -1,88 +1,118 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Victor Reijs" />
 
-<meta name="date" content="2019-08-28" />
+<meta name="date" content="2023-04-26" />
 
 <title>swephR</title>
 
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {  }
+{ }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -91,13 +121,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -105,6 +142,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -118,9 +156,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -289,7 +324,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -304,149 +340,157 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">swephR</h1>
 <h4 class="author">Victor Reijs</h4>
-<h4 class="date">2019-08-28</h4>
+<h4 class="date">2023-04-26</h4>
 
 
 
 <div id="some-simple-steps-to-do-calculations" class="section level1">
 <h1>Some simple steps to do calculations</h1>
-<p>To compute the position of celestial body or star with SE (Swiss Ephemeris), you do the following steps:</p>
+<p>To compute the position of celestial body or star with SE (Swiss
+Ephemeris), you do the following steps:</p>
 <ol style="list-style-type: decimal">
 <li>First load <code>swephR</code>:</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(swephR)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(swephR)</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
-<li>Optionally set the directory path of the ephemeris files (the format of the path depends on your OS), e.g.:</li>
+<li>Optionally set the directory path of the ephemeris files (the format
+of the path depends on your OS), e.g.:</li>
 </ol>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">swe_set_ephe_path</span>(<span class="st">&quot;C:</span><span class="ch">\\</span><span class="st">sweph</span><span class="ch">\\</span><span class="st">ephe&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">swe_set_ephe_path</span>(<span class="st">&quot;C:</span><span class="sc">\\</span><span class="st">sweph</span><span class="sc">\\</span><span class="st">ephe&quot;</span>)</span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
-<li>For a specific date, compute the Julian day number (in below example: J2000.0, 1 January 2000 at 12:00 UT):</li>
+<li>For a specific date, compute the Julian day number (in below
+example: J2000.0, 1 January 2000 at 12:00 UT):</li>
 </ol>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">year &lt;-<span class="st"> </span><span class="dv">2000</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">month &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">day &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">hour &lt;-<span class="st"> </span><span class="dv">12</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">jdut &lt;-<span class="st"> </span><span class="kw">swe_julday</span>(year, month, day, hour, SE<span class="op">$</span>GREG_CAL)</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">jdut</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; [1] 2451545</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>year <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>month <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>day <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>hour <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>jdut <span class="ot">&lt;-</span> <span class="fu">swe_julday</span>(year, month, day, hour, SE<span class="sc">$</span>GREG_CAL)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>jdut</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 2451545</span></span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
-<li>Compute (using Moshier ephemeris) the positions (longitude, latitude, distance, longitude speed and latitude speed) of a planet or other celestial bodies (in below example: the Sun):</li>
+<li>Compute (using Moshier ephemeris) the positions (longitude,
+latitude, distance, longitude speed and latitude speed) of a planet or
+other celestial bodies (in below example: the Sun):</li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">ipl &lt;-<span class="st"> </span>SE<span class="op">$</span>SUN</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">iflag &lt;-<span class="st"> </span>SE<span class="op">$</span>FLG_MOSEPH <span class="op">+</span><span class="st"> </span>SE<span class="op">$</span>FLG_SPEED</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">result &lt;-<span class="st"> </span><span class="kw">swe_calc_ut</span>(jdut, ipl, iflag)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">result</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; $return</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; [1] 260</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; $xx</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; [1]  2.803689e+02  2.323265e-04  9.833276e-01  1.019432e+00 -8.922802e-07</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; [6] -7.339410e-06</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; $serr</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; [1] &quot;&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ipl <span class="ot">&lt;-</span> SE<span class="sc">$</span>SUN</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>iflag <span class="ot">&lt;-</span> SE<span class="sc">$</span>FLG_MOSEPH <span class="sc">+</span> SE<span class="sc">$</span>FLG_SPEED</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">swe_calc_ut</span>(jdut, ipl, iflag)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>result</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $return</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 260</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $xx</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  2.803689e+02  2.323265e-04  9.833276e-01  1.019432e+00 -8.922802e-07</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6] -7.339410e-06</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $serr</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;&quot;</span></span></code></pre></div>
 <p>or a fixed star (in below example: Sirius):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">starname =<span class="st"> &quot;sirius&quot;</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">result &lt;-<span class="st"> </span><span class="kw">swe_fixstar2_ut</span>(starname, jdut, iflag)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">result</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; $return</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; [1] 260</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; $starname</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; [1] &quot;Sirius,alCMa&quot;</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; $xx</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; [1]  1.040853e+02 -3.960507e+01  5.439322e+05  4.643164e-05 -7.119376e-05</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; [6] -4.130539e-03</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; $serr</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; [1] &quot;&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>starname <span class="ot">=</span> <span class="st">&quot;sirius&quot;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">swe_fixstar2_ut</span>(starname, jdut, iflag)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>result</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $return</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 260</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $starname</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Sirius,alCMa&quot;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $xx</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  1.040853e+02 -3.960507e+01  5.439322e+05  4.643164e-05 -7.119376e-05</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6] -4.130539e-03</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $serr</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;&quot;</span></span></code></pre></div>
 <ol start="5" style="list-style-type: decimal">
 <li>Determine the Julian day number of the Heliacal Rise of Sirius:</li>
 </ol>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">options</span>(<span class="dt">digits=</span><span class="dv">15</span>)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">result &lt;-<span class="st"> </span><span class="kw">swe_heliacal_ut</span>(jdut,<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">50</span>,<span class="dv">10</span>),<span class="kw">c</span>(<span class="fl">1013.25</span>,<span class="dv">15</span>,<span class="dv">50</span>,<span class="fl">0.25</span>),<span class="kw">c</span>(<span class="dv">25</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="fl">0.8</span>),starname,</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">  SE<span class="op">$</span>HELIACAL_RISING,SE<span class="op">$</span>HELFLAG_HIGH_PRECISION<span class="op">+</span>SE<span class="op">$</span>FLG_MOSEPH)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">result</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; $return</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; [1] 0</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; $dret</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;  [1] 2451779.67915537 2451779.68432898 2451779.69042851       0.00000000</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;  [5]       0.00000000       0.00000000       0.00000000       0.00000000</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;  [9]       0.00000000       0.00000000       0.00000000       0.00000000</span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; [13]       0.00000000       0.00000000       0.00000000       0.00000000</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; [17]       0.00000000       0.00000000       0.00000000       0.00000000</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; [21]       0.00000000       0.00000000       0.00000000       0.00000000</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; [25]       0.00000000       0.00000000       0.00000000       0.00000000</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; [29]       0.00000000       0.00000000       0.00000000       0.00000000</span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; [33]       0.00000000       0.00000000       0.00000000       0.00000000</span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; [37]       0.00000000       0.00000000       0.00000000       0.00000000</span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; [41]       0.00000000       0.00000000       0.00000000       0.00000000</span></a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt; [45]       0.00000000       0.00000000       0.00000000       0.00000000</span></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt; [49]       0.00000000       0.00000000</span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; $serr</span></a>
-<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co">#&gt; [1] &quot;&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits=</span><span class="dv">15</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">swe_heliacal_ut</span>(jdut,<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">50</span>,<span class="dv">10</span>),<span class="fu">c</span>(<span class="fl">1013.25</span>,<span class="dv">15</span>,<span class="dv">50</span>,<span class="fl">0.25</span>),<span class="fu">c</span>(<span class="dv">25</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="fl">0.8</span>),starname,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  SE<span class="sc">$</span>HELIACAL_RISING,SE<span class="sc">$</span>HELFLAG_HIGH_PRECISION<span class="sc">+</span>SE<span class="sc">$</span>FLG_MOSEPH)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>result</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $return</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $dret</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] 2451779.67915537 2451779.68432898 2451779.69042851       0.00000000</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [5]       0.00000000       0.00000000       0.00000000       0.00000000</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [9]       0.00000000       0.00000000       0.00000000       0.00000000</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13]       0.00000000       0.00000000       0.00000000       0.00000000</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [17]       0.00000000       0.00000000       0.00000000       0.00000000</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [21]       0.00000000       0.00000000       0.00000000       0.00000000</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [25]       0.00000000       0.00000000       0.00000000       0.00000000</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [29]       0.00000000       0.00000000       0.00000000       0.00000000</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [33]       0.00000000       0.00000000       0.00000000       0.00000000</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [37]       0.00000000       0.00000000       0.00000000       0.00000000</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [41]       0.00000000       0.00000000       0.00000000       0.00000000</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [45]       0.00000000       0.00000000       0.00000000       0.00000000</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [49]       0.00000000       0.00000000</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $serr</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;&quot;</span></span></code></pre></div>
 <ol start="6" style="list-style-type: decimal">
-<li>Here is a miniature sample program described in Chapter 0 of the programmer’s manual of SE (<a href="http://www.astro.com/swisseph/swephprg.htm#_Toc505244830">see also</a>):</li>
+<li>Here is a miniature sample program described in Chapter 0 of the
+programmer’s manual of SE (<a href="http://www.astro.com/swisseph/swephprg.htm#_Toc505244830">see
+also</a>):</li>
 </ol>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">  <span class="kw">options</span>(<span class="dt">digits=</span><span class="dv">6</span>)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">  <span class="kw">swe_set_ephe_path</span>(<span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">  iflag =<span class="st"> </span>SE<span class="op">$</span>FLG_SPEED <span class="op">+</span><span class="st"> </span>SE<span class="op">$</span>FLG_MOSEPH</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">  {</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">    <span class="co">#get year</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">    jyear &lt;-<span class="st"> </span><span class="dv">2000</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7">    <span class="co">#get month</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8">    jmon &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9">    <span class="co">#get day</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10">    jday &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11">    <span class="co">#get time</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12">    jhour &lt;-<span class="st"> </span><span class="dv">12</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13">    <span class="co">#determine julian day number (at 12:00 GMT)</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14">    tjd_ut &lt;-<span class="st"> </span><span class="kw">swe_julday</span>(jyear, jmon, jday, jhour, SE<span class="op">$</span>GREG_CAL)</a>
-<a class="sourceLine" id="cb7-15" data-line-number="15">    <span class="kw">cat</span>(<span class="st">&quot;Julian day number (UT) :&quot;</span>, tjd_ut, <span class="st">&quot;(&quot;</span>,jyear,<span class="st">&quot;,&quot;</span>,jmon,<span class="st">&quot;,&quot;</span>,jday,<span class="st">&quot;; proleptic Gregorian calendar)</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb7-16" data-line-number="16">    <span class="kw">cat</span>(<span class="st">&quot;planet :&quot;</span>,</a>
-<a class="sourceLine" id="cb7-17" data-line-number="17">        <span class="kw">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;distance&quot;</span>, <span class="st">&quot;long. speed&quot;</span>, <span class="st">&quot;lat. speed&quot;</span>),</a>
-<a class="sourceLine" id="cb7-18" data-line-number="18">        <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb7-19" data-line-number="19">    <span class="kw">cat</span>(<span class="st">&quot;===========================================================</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb7-20" data-line-number="20">    <span class="co"># loop over all planets</span></a>
-<a class="sourceLine" id="cb7-21" data-line-number="21">    <span class="cf">for</span> (p <span class="cf">in</span> SE<span class="op">$</span>SUN<span class="op">:</span>SE<span class="op">$</span>OSCU_APOG) {</a>
-<a class="sourceLine" id="cb7-22" data-line-number="22">      <span class="co"># get the name of the planet p</span></a>
-<a class="sourceLine" id="cb7-23" data-line-number="23">      objectname =<span class="st"> </span><span class="kw">swe_get_planet_name</span>(p)</a>
-<a class="sourceLine" id="cb7-24" data-line-number="24">        <span class="co"># do the coordinate calculation for this planet p</span></a>
-<a class="sourceLine" id="cb7-25" data-line-number="25">        i =<span class="st"> </span><span class="kw">swe_calc_ut</span>(tjd_ut, p, iflag)</a>
-<a class="sourceLine" id="cb7-26" data-line-number="26">        <span class="cf">if</span> (i<span class="op">$</span>return <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>) {</a>
-<a class="sourceLine" id="cb7-27" data-line-number="27">          <span class="kw">cat</span>(<span class="st">&quot;Error :&quot;</span>, i<span class="op">$</span>err, <span class="st">&quot;(&quot;</span>, objectname, <span class="st">&quot;)</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb7-28" data-line-number="28">        }</a>
-<a class="sourceLine" id="cb7-29" data-line-number="29">        <span class="cf">else</span></a>
-<a class="sourceLine" id="cb7-30" data-line-number="30">        {</a>
-<a class="sourceLine" id="cb7-31" data-line-number="31">          <span class="co"># print data</span></a>
-<a class="sourceLine" id="cb7-32" data-line-number="32">          <span class="kw">cat</span> (objectname, <span class="st">&quot;:&quot;</span>, i<span class="op">$</span>xx[<span class="dv">0</span><span class="op">:</span><span class="dv">5</span>], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb7-33" data-line-number="33">        }</a>
-<a class="sourceLine" id="cb7-34" data-line-number="34">    }</a>
-<a class="sourceLine" id="cb7-35" data-line-number="35">  }</a>
-<a class="sourceLine" id="cb7-36" data-line-number="36"><span class="co">#&gt; Julian day number (UT) : 2451545 ( 2000 , 1 , 1 ; proleptic Gregorian calendar)</span></a>
-<a class="sourceLine" id="cb7-37" data-line-number="37"><span class="co">#&gt; planet : longitude latitude distance long. speed lat. speed </span></a>
-<a class="sourceLine" id="cb7-38" data-line-number="38"><span class="co">#&gt; ===========================================================</span></a>
-<a class="sourceLine" id="cb7-39" data-line-number="39"><span class="co">#&gt; Sun : 280.369 0.000232327 0.983328 1.01943 -8.9228e-07 </span></a>
-<a class="sourceLine" id="cb7-40" data-line-number="40"><span class="co">#&gt; Moon : 223.324 5.17082 0.00268998 12.0212 -0.178063 </span></a>
-<a class="sourceLine" id="cb7-41" data-line-number="41"><span class="co">#&gt; Mercury : 271.889 -0.994825 1.41547 1.55625 -0.0974918 </span></a>
-<a class="sourceLine" id="cb7-42" data-line-number="42"><span class="co">#&gt; Venus : 241.566 2.06635 1.13758 1.20904 -0.0280736 </span></a>
-<a class="sourceLine" id="cb7-43" data-line-number="43"><span class="co">#&gt; Mars : 327.963 -1.06778 1.84969 0.775673 0.0124755 </span></a>
-<a class="sourceLine" id="cb7-44" data-line-number="44"><span class="co">#&gt; Jupiter : 25.253 -1.26217 4.62118 0.0407613 0.00517336 </span></a>
-<a class="sourceLine" id="cb7-45" data-line-number="45"><span class="co">#&gt; Saturn : 40.3956 -2.44482 8.6528 -0.0199448 0.00474316 </span></a>
-<a class="sourceLine" id="cb7-46" data-line-number="46"><span class="co">#&gt; Uranus : 314.809 -0.658333 20.7272 0.0503436 0.000250014 </span></a>
-<a class="sourceLine" id="cb7-47" data-line-number="47"><span class="co">#&gt; Neptune : 303.193 0.234991 31.0245 0.0355701 -0.000223651 </span></a>
-<a class="sourceLine" id="cb7-48" data-line-number="48"><span class="co">#&gt; Pluto : 251.455 10.8552 31.0644 0.0351529 0.0014674 </span></a>
-<a class="sourceLine" id="cb7-49" data-line-number="49"><span class="co">#&gt; mean Node : 125.041 0 0.00256956 -0.0529518 0 </span></a>
-<a class="sourceLine" id="cb7-50" data-line-number="50"><span class="co">#&gt; true Node : 123.953 0 0.00244538 -0.0543822 0 </span></a>
-<a class="sourceLine" id="cb7-51" data-line-number="51"><span class="co">#&gt; mean Apogee : 263.464 3.41972 0.00271063 0.111328 -0.011021 </span></a>
-<a class="sourceLine" id="cb7-52" data-line-number="52"><span class="co">#&gt; osc. Apogee : 252.979 4.07551 0.00271384 1.64684 -0.0971172</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">options</span>(<span class="at">digits=</span><span class="dv">6</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">swe_set_ephe_path</span>(<span class="cn">NULL</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  iflag <span class="ot">=</span> SE<span class="sc">$</span>FLG_SPEED <span class="sc">+</span> SE<span class="sc">$</span>FLG_MOSEPH</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#get year</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    jyear <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">#get month</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    jmon <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">#get day</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    jday <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">#get time</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    jhour <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#determine julian day number (at 12:00 GMT)</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    tjd_ut <span class="ot">&lt;-</span> <span class="fu">swe_julday</span>(jyear, jmon, jday, jhour, SE<span class="sc">$</span>GREG_CAL)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;Julian day number (UT) :&quot;</span>, tjd_ut, <span class="st">&quot;(&quot;</span>,jyear,<span class="st">&quot;,&quot;</span>,jmon,<span class="st">&quot;,&quot;</span>,jday,<span class="st">&quot;; proleptic Gregorian calendar)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;planet :&quot;</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">c</span>(<span class="st">&quot;longitude&quot;</span>, <span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;distance&quot;</span>, <span class="st">&quot;long. speed&quot;</span>, <span class="st">&quot;lat. speed&quot;</span>),</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">&quot;===========================================================</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># loop over all planets</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (p <span class="cf">in</span> SE<span class="sc">$</span>SUN<span class="sc">:</span>SE<span class="sc">$</span>OSCU_APOG) {</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>      <span class="co"># get the name of the planet p</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>      objectname <span class="ot">=</span> <span class="fu">swe_get_planet_name</span>(p)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># do the coordinate calculation for this planet p</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        i <span class="ot">=</span> <span class="fu">swe_calc_ut</span>(tjd_ut, p, iflag)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (i<span class="sc">$</span>return <span class="sc">&lt;</span> <span class="dv">0</span>) {</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>          <span class="fu">cat</span>(<span class="st">&quot;Error :&quot;</span>, i<span class="sc">$</span>err, <span class="st">&quot;(&quot;</span>, objectname, <span class="st">&quot;)</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>          <span class="co"># print data</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>          <span class="fu">cat</span> (objectname, <span class="st">&quot;:&quot;</span>, i<span class="sc">$</span>xx[<span class="dv">0</span><span class="sc">:</span><span class="dv">5</span>], <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Julian day number (UT) : 2451545 ( 2000 , 1 , 1 ; proleptic Gregorian calendar)</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; planet : longitude latitude distance long. speed lat. speed </span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ===========================================================</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sun : 280.369 0.000232327 0.983328 1.01943 -8.9228e-07 </span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Moon : 223.324 5.17082 0.00268998 12.0212 -0.178063 </span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Mercury : 271.889 -0.994825 1.41547 1.55625 -0.0974918 </span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Venus : 241.566 2.06635 1.13758 1.20904 -0.0280736 </span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Mars : 327.963 -1.06778 1.84969 0.775673 0.0124755 </span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Jupiter : 25.253 -1.26217 4.62118 0.0407613 0.00517336 </span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Saturn : 40.3956 -2.44482 8.6528 -0.0199448 0.00474316 </span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Uranus : 314.809 -0.658333 20.7272 0.0503436 0.000250014 </span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Neptune : 303.193 0.234991 31.0245 0.0355701 -0.000223651 </span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Pluto : 251.455 10.8552 31.0644 0.0351529 0.0014674 </span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mean Node : 125.041 0 0.00256956 -0.0529518 0 </span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; true Node : 123.953 0 0.00244538 -0.0543822 0 </span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mean Apogee : 263.464 3.41972 0.00271063 0.111328 -0.011021 </span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; osc. Apogee : 252.979 4.07551 0.00271384 1.64684 -0.0971172</span></span></code></pre></div>
 <ol start="7" style="list-style-type: decimal">
-<li>At the end of your computations close all files and free up memory:</li>
+<li>At the end of your computations close all files and free up
+memory:</li>
 </ol>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">swe_close</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">swe_close</span>()</span></code></pre></div>
 </div>
 
 
