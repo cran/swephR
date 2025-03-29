@@ -1,5 +1,11 @@
 # NEWS for swephR
 
+## swephR (0.3.2)
+
+* Add files seorbel.txt (fictitious bodies) and seleapsec.txt (leap seconds)
+* Update sefstars.txt (fixed stars)
+* Make sure that unused code does not linger after compilation, triggering a warning on CRAN
+
 ## swephR 0.3.1
 
 * new upstream version v2.10.03
